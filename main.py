@@ -12,20 +12,20 @@ class LoginScreen(GridLayout):
     def __init__(self, **kwargs):
         super(LoginScreen, self).__init__(**kwargs)
         self.cols = 2
-        self.add_widget(Label(text='User Name'))
-        self.username = TextInput(multiline=False)
-        self.add_widget(self.username)
+        self.add_widget(Label(text='Email id: '))
+        self.email = TextInput(multiline=False)
+        self.add_widget(self.email)
 
-        self.add_widget(Label(text='password'))
+        self.add_widget(Label(text='Password: '))
         self.password = TextInput(password=True, multiline=False)
         self.add_widget(self.password)
 
-        btn1 = Button(text='Login')
-        btn1.bind(on_press=self.callback)
-        self.add_widget(btn1)
+        login = Button(text='Login')
+        login.bind(on_press=self.callback)
+        self.add_widget(login)
     
     def callback(self, instance):
-        print('\n\nLogin as : '+ self.username.text +'\nPassward : '+ self.password.text)
+        print('\n\nLogin as : '+ self.email.text +'\nPassword : '+ self.password.text)
     
 
 class SignUp(GridLayout):
