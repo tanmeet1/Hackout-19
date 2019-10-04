@@ -1,5 +1,4 @@
 import kivy
-kivy.require('1.10.0')
 from kivy.app import App
 from kivy.uix.carousel import Carousel
 from kivy.uix.image import AsyncImage
@@ -9,23 +8,38 @@ from kivy.clock import Clock
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
+from kivy.uix.screenmanager import ScreenManager, Screen
 
 
-class index_main():
+class index_main(BoxLayout):
     def __init__(self,**kwargs):
-        #super().__init__(**kwargs)
-        self.carousel=Carousel()
-        self.Box1=BoxLayout(orientation= 'vertical', spacing = 20)
-        self.Box1.add_widget(Label(text="HealthCare"))
-        self.carousel.direction = "right"
+        super().__init__(**kwargs)
+        Box1=BoxLayout(orientation= 'vertical', spacing = 20)
+        Box1.add_widget(Label(text="HealthCare"))
+        carousel = Carousel(direction='left')
+
         for i in range(1, 5):
             src = "res/%s.jpg" % str(i)
             image = AsyncImage(source=src, allow_stretch=True)
-            self.carousel.add_widget(image)
-        self.carousel.loop = True
-        Clock.schedule_interval(self.carousel.load_next,2)
-        self.Box1.add_widget(self.carousel)
+            carousel.add_widget(image)
+        carousel.loop = True
+        Clock.schedule_interval(carousel.load_next,2)
+        Box1.add_widget(carousel)
 
+        box2 = BoxLayout(spacing=20)
+        Login =  Button(text='Login', on_press=self.Login_Callback)
+        Signup =  Button(text='SignUp', on_press=self.Signup_Callback)
+        box2.add_widget(Login)
+        box2.add_widget(Signup)
+        Box1.add_widget(box2)
+        
+        self.add_widget(Box1)
+    
+    def Login_Callback(self, instance):
+        print("Login Complete")
+
+    def Signup_Callback(self, instance):
+        print("Signup Complete")
 
 
 class LoginScreen(GridLayout):
@@ -76,7 +90,25 @@ class SignUp(GridLayout):
         
 class HealthCare(App):
     def build(self):
-        return index_main()
+        self.screenManager = ScreenManager()
+
+        self.indexPage = index_main()
+        indexScreen = Screen(name="Index")
+        indexScreen.add_widget(self.indexPage)
+        self.screenManager.add_widget(indexScreen)
+
+        self.loginPage = LoginScreen()
+        loginScreen = Screen(name="Login")
+        loginScreen.add_widget(self.loginPage)
+        self.screenManager.add_widget(loginScreen)
+
+        self.signUpPage = SignUp()
+        signUpScreen = Screen(name="SignUp")
+        signUpScreen.add_widget(self.signUpPage)
+        self.screenManager.add_widget(signUpScreen)
+
+        return self.screenManager
+
 
       
 if __name__ == "__main__":
