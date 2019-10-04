@@ -1,9 +1,10 @@
 import kivy
 from kivy.app import App
-from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
-import kivy.uix.button as kb
+from kivy.uix.button import Button
+
 
 #class IndexPage():
 
@@ -19,7 +20,7 @@ class LoginScreen(GridLayout):
         self.password = TextInput(password=True, multiline=False)
         self.add_widget(self.password)
 
-        btn1 = kb.Button(text='Login')
+        btn1 = Button(text='Login')
         btn1.bind(on_press=self.callback)
         self.add_widget(btn1)
     
@@ -27,13 +28,36 @@ class LoginScreen(GridLayout):
         print('\n\nLogin as : '+ self.username.text +'\nPassward : '+ self.password.text)
     
 
+class SignUp(GridLayout):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.cols = 2
+        
+        self.add_widget(Label(text="Email Id:"))
+        self.email = TextInput(multiline=False)
+        self.add_widget(self.email)
 
-#class SignUp():
+        self.add_widget(Label(text="Password:"))
+        self.password = TextInput(password=True,multiline=False)
+        self.add_widget(self.password)
 
+        self.add_widget(Label())
 
+        self.signUp = Button(text="Sign Up")
+        self.signUp.bind(on_press=self.signUpButton)
+        self.add_widget(self.signUp)
+
+    def signUpButton(self,instance):
+        email = self.email.text
+        password = self.password.text
+
+        print(f"Saving details in database\nEmail: {email}\nPassword: {password}")
+
+        
 class HealthCare(App):
     def build(self):
         return LoginScreen()
-
+      
+      
 if __name__ == "__main__":
     HealthCare().run()
