@@ -1,5 +1,4 @@
 import kivy
-kivy.require('1.10.0')
 from kivy.app import App
 from kivy.uix.carousel import Carousel
 from kivy.uix.image import AsyncImage
@@ -9,6 +8,7 @@ from kivy.clock import Clock
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
+from kivy.uix.screenmanager import ScreenManager, Screen
 
 
 class index_main(BoxLayout):
@@ -90,7 +90,25 @@ class SignUp(GridLayout):
         
 class HealthCare(App):
     def build(self):
-        return index_main()
+        self.screenManager = ScreenManager()
+
+        self.indexPage = index_main()
+        indexScreen = Screen(name="Index")
+        indexScreen.add_widget(self.indexPage)
+        self.screenManager.add_widget(indexScreen)
+
+        self.loginPage = LoginScreen()
+        loginScreen = Screen(name="Login")
+        loginScreen.add_widget(self.loginPage)
+        self.screenManager.add_widget(loginScreen)
+
+        self.signUpPage = SignUp()
+        signUpScreen = Screen(name="SignUp")
+        signUpScreen.add_widget(self.signUpPage)
+        self.screenManager.add_widget(signUpScreen)
+
+        return self.screenManager
+
 
       
 if __name__ == "__main__":
