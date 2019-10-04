@@ -1,16 +1,39 @@
 import kivy
 from kivy.app import App
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.label import Label
+from kivy.uix.textinput import TextInput
+import kivy.uix.button as kb
 
-class IndexPage():
+#class IndexPage():
 
-class Login():
+class LoginScreen(GridLayout):
+    def __init__(self, **kwargs):
+        super(LoginScreen, self).__init__(**kwargs)
+        self.cols = 2
+        self.add_widget(Label(text='User Name'))
+        self.username = TextInput(multiline=False)
+        self.add_widget(self.username)
 
-class SignUp():
+        self.add_widget(Label(text='password'))
+        self.password = TextInput(password=True, multiline=False)
+        self.add_widget(self.password)
+
+        btn1 = kb.Button(text='Login')
+        btn1.bind(on_press=self.callback)
+        self.add_widget(btn1)
+    
+    def callback(self, instance):
+        print('\n\nLogin as : '+ self.username.text +'\nPassward : '+ self.password.text)
+    
+
+
+#class SignUp():
 
 
 class HealthCare(App):
     def build(self):
-        return IndexPage()
+        return LoginScreen()
 
 if __name__ == "__main__":
     HealthCare().run()
