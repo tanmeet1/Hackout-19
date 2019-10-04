@@ -36,10 +36,12 @@ class index_main(BoxLayout):
         self.add_widget(Box1)
     
     def Login_Callback(self, instance):
-        print("Login Complete")
+        print("Login Clicked")
+        app.screenManager.current = "Login"
 
     def Signup_Callback(self, instance):
-        print("Signup Complete")
+        print("Signup Clicked")
+        app.screenManager.current = "SignUp"
 
 
 class LoginScreen(GridLayout):
@@ -57,9 +59,16 @@ class LoginScreen(GridLayout):
         login = Button(text='Login')
         login.bind(on_press=self.callback)
         self.add_widget(login)
+
+        back = Button(text='Return to Main Menu')
+        back.bind(on_press=self.retback)
+        self.add_widget(back)
     
     def callback(self, instance):
         print('\n\nLogin as : '+ self.email.text +'\nPassword : '+ self.password.text)
+    def retback(self,instance):
+        app.screenManager.current = "Index"
+
     
 
 class SignUp(GridLayout):
@@ -75,17 +84,22 @@ class SignUp(GridLayout):
         self.password = TextInput(password=True,multiline=False)
         self.add_widget(self.password)
 
-        self.add_widget(Label())
-
         self.signUp = Button(text="Sign Up")
         self.signUp.bind(on_press=self.signUpButton)
         self.add_widget(self.signUp)
+
+        back = Button(text='Return to Main Menu')
+        back.bind(on_press=self.retback)
+        self.add_widget(back)
 
     def signUpButton(self,instance):
         email = self.email.text
         password = self.password.text
 
         print(f"Saving details in database\nEmail: {email}\nPassword: {password}")
+
+    def retback(self,instance):
+        app.screenManager.current = "Index"
 
         
 class HealthCare(App):
@@ -112,4 +126,5 @@ class HealthCare(App):
 
       
 if __name__ == "__main__":
-    HealthCare().run()
+    app = HealthCare()
+    app.run()
