@@ -91,9 +91,10 @@ class Update_info(BoxLayout):
 
         data = pd.read_csv("res/Singledata User Info.csv")
         
-        print(data.index)
-        if UserID_Data in data["UID"]:
-            data.set_index("UID",inplace=True)
+        #print(data.index)
+        #print(data["UID"])
+        data.set_index("UID",inplace=True)
+        if UserID_Data in data.index:
             data.loc[UserID_Data]['Name'] = UserName_Data
             data.loc[UserID_Data]["Time"] = time_data
             data.loc[UserID_Data]["Height"] = Height_data
@@ -178,7 +179,6 @@ class GetData(BoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         #self.article_read = pd.read_csv("res/Singledata User Info.csv",names=["UID","Name","Time","Height","Weight","Allergy"])
-        self.article_read = pd.read_csv("res/Singledata User Info.csv")
         self.add_widget(Label(text="Patient Data"))
         self.orientation = 'vertical'
         # Grid1 = GridLayout(cols = 2)
@@ -191,6 +191,7 @@ class GetData(BoxLayout):
     def update_info(self,pid):
         #print(self.article_read.UID)
         #print(self.article_read.UID == int(pid))
+        self.article_read = pd.read_csv("res/Singledata User Info.csv")
         comp = self.article_read.UID == int(pid)
         self.add_widget(Label(text="UID: "+ str(self.article_read.UID[comp].values)))
         self.add_widget(Label(text="Name: "+str(self.article_read.Name[comp].values)))
