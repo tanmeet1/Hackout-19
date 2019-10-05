@@ -13,6 +13,7 @@ import datetime
 import csv
 import pandas as pd
 
+
 class index_main(BoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
@@ -44,6 +45,73 @@ class index_main(BoxLayout):
     def Signup_Callback(self, instance):
         print("Signup Clicked")
         app.screenManager.current = "SignUp"
+
+
+class Update_info(BoxLayout):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+    
+        Box1=BoxLayout(orientation= 'vertical', spacing = 20)
+        Box1.add_widget(Label(text="Update Info"))
+        grid = GridLayout(cols = 2)
+
+        grid.add_widget(Label(text="User ID :",color=(1,0,0,1)))
+        self.userID = TextInput(multiline=False)
+        grid.add_widget(self.userID)
+        grid.add_widget(Label(text="User Name :",color=(1,0,0,1)))
+        self.userName = TextInput(multiline=False)
+        grid.add_widget(self.userName)
+        grid.add_widget(Label(text="Height :",color=(1,0,0,1)))
+        self.hight = TextInput(multiline=False)
+        grid.add_widget(self.hight)
+        grid.add_widget(Label(text="Weight :",color=(1,0,0,1)))
+        self.weight = TextInput(multiline=False)
+        grid.add_widget(self.weight)
+        grid.add_widget(Label(text="Allergy :",color=(1,0,0,1)))
+        self.allergy = TextInput(multiline=False)
+        grid.add_widget(self.allergy)
+        
+        self.Submit =  Button(text='Submit', on_press=self.Submit_Callback,color=(0,1,0,1))
+        Back =  Button(text='Back', on_press=self.Back_Callback,color=(0,1,0,1))
+        grid.add_widget(self.Submit)
+        grid.add_widget(Back)
+
+        Box1.add_widget(grid)
+        self.add_widget(Box1)
+    
+    def Submit_Callback(self, instance):
+        print("Submit Clicked")
+        UserID_Data = int(self.userID.text)
+        UserName_Data = str(self.userName.text)
+        Height_data = str(self.hight.text)
+        Weight_data = str(self.weight.text)
+        Allergy_data = str(self.allergy.text)
+        time_data = str(datetime.datetime.now())
+        fields=[UserID_Data,UserName_Data,time_data,Height_data,Weight_data,Allergy_data]
+
+        data = pd.read_csv("res/Singledata User Info.csv")
+        
+        #print(data.index)
+        #print(data["UID"])
+        data.set_index("UID",inplace=True)
+        if UserID_Data in data.index:
+            data.loc[UserID_Data]['Name'] = UserName_Data
+            data.loc[UserID_Data]["Time"] = time_data
+            data.loc[UserID_Data]["Height"] = Height_data
+            data.loc[UserID_Data]["Weight"] = Weight_data
+            data.loc[UserID_Data]["Allergy"] = Allergy_data
+            data.to_csv("res/Singledata User Info.csv",index=True)
+        else:
+            with open("res/Singledata User Info.csv",'a') as dataN:
+                writer = csv.writer(dataN)
+                writer.writerow(fields)
+            dataN.close()
+
+        app.screenManager.current = "AfterLogin"
+
+    def Back_Callback(self, instance):
+        print("Back Clicked")
+        app.screenManager.current = "AfterLogin"
 
 
 class LoginScreen(GridLayout):
@@ -106,6 +174,33 @@ class SignUp(GridLayout):
 class Update_info(BoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
+
+        #self.article_read = pd.read_csv("res/Singledata User Info.csv",names=["UID","Name","Time","Height","Weight","Allergy"])
+        self.add_widget(Label(text="Patient Data"))
+        self.orientation = 'vertical'
+        # Grid1 = GridLayout(cols = 2)
+        # Grid1.add_widget(Label(text = "Enter the Patient ID : "))
+        # Grid1.uid = TextInput(multiline = False)
+        # Grid1.add_widget(Grid1.pid)
+
+        #self.add_widget(Grid1) 
+        
+    def update_info(self,pid):
+        #print(self.article_read.UID)
+        #print(self.article_read.UID == int(pid))
+        self.article_read = pd.read_csv("res/Singledata User Info.csv")
+        comp = self.article_read.UID == int(pid)
+        self.add_widget(Label(text="UID: "+ str(self.article_read.UID[comp].values)))
+        self.add_widget(Label(text="Name: "+str(self.article_read.Name[comp].values)))
+        self.add_widget(Label(text="Time: "+str(self.article_read.Time[comp].values)))
+        self.add_widget(Label(text="Height: "+str(self.article_read.Height[comp].values)))
+        self.add_widget(Label(text="Weight: "+str(self.article_read.Weight[comp].values)))
+        self.add_widget(Label(text="Allergy: "+str(self.article_read.Allergy[comp].values)))
+        #print(self.__class__.pid)
+
+
+        
+class ScanUID(BoxLayout):
     
         Box1=BoxLayout(orientation= 'vertical', spacing = 20)
         Box1.add_widget(Label(text="Update Info"))
@@ -132,8 +227,17 @@ class Update_info(BoxLayout):
         grid.add_widget(self.Submit)
         grid.add_widget(Back)
 
+        add = Button(text="Add New Patient")
+        add.bind(on_press=self.adduid)
+        self.add_widget(add)
+
+    def getuid(self,instance):
+        app.screenManager.current = "GetUID"
+    def adduid(self,instance):
+        app.screenManager.current = "UpdateInfo"
         Box1.add_widget(grid)
         self.add_widget(Box1)
+    
     
     def Submit_Callback(self, instance):
         print("Submit Clicked")
@@ -155,6 +259,7 @@ class Update_info(BoxLayout):
         app.screenManager.current = "DataScreen"
 
 
+
 class HealthCare(App):
     def build(self):
         self.screenManager = ScreenManager()
@@ -173,6 +278,11 @@ class HealthCare(App):
         signUpScreen = Screen(name="SignUp")
         signUpScreen.add_widget(self.signUpPage)
         self.screenManager.add_widget(signUpScreen)
+
+        self.UpdateInfo = Update_info()
+        UpdateInfoScreen = Screen(name="UpdateInfo")
+        UpdateInfoScreen.add_widget(self.UpdateInfo)
+        self.screenManager.add_widget(UpdateInfoScreen)
 
         self.UpdateInfo = Update_info()
         UpdateInfoScreen = Screen(name="UpdateInfo")
