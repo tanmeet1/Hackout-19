@@ -177,7 +177,8 @@ class GetData(BoxLayout):
 
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
-        self.article_read = pd.read_csv("res/Singledata User Info.csv",names=["UID","Name","Time","Height","Weight","Allergy"])
+        #self.article_read = pd.read_csv("res/Singledata User Info.csv",names=["UID","Name","Time","Height","Weight","Allergy"])
+        self.article_read = pd.read_csv("res/Singledata User Info.csv")
         self.add_widget(Label(text="Patient Data"))
         self.orientation = 'vertical'
         # Grid1 = GridLayout(cols = 2)
@@ -188,14 +189,15 @@ class GetData(BoxLayout):
         #self.add_widget(Grid1) 
         
     def update_info(self,pid):
-        print(self.article_read.head())
-        comp = self.article_read.UID == pid
-        self.add_widget(Label(text=str(self.article_read.UID[comp])))
-        self.add_widget(Label(text=str(self.article_read.Name[comp])))
-        self.add_widget(Label(text=str(self.article_read.Time[comp])))
-        self.add_widget(Label(text=str(self.article_read.Height[comp])))
-        self.add_widget(Label(text=str(self.article_read.Weight[comp])))
-        self.add_widget(Label(text=str(self.article_read.Allergy[comp])))
+        #print(self.article_read.UID)
+        #print(self.article_read.UID == int(pid))
+        comp = self.article_read.UID == int(pid)
+        self.add_widget(Label(text="UID: "+ str(self.article_read.UID[comp].values)))
+        self.add_widget(Label(text="Name: "+str(self.article_read.Name[comp].values)))
+        self.add_widget(Label(text="Time: "+str(self.article_read.Time[comp].values)))
+        self.add_widget(Label(text="Height: "+str(self.article_read.Height[comp].values)))
+        self.add_widget(Label(text="Weight: "+str(self.article_read.Weight[comp].values)))
+        self.add_widget(Label(text="Allergy: "+str(self.article_read.Allergy[comp].values)))
         #print(self.__class__.pid)
 
 
