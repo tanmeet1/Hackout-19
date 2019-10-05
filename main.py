@@ -13,7 +13,6 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 import datetime
 import csv
 
-
 class index_main(BoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
