@@ -166,7 +166,7 @@ class LoginScreen(BoxLayout):
         self.spacing = 150
         self.orientation='vertical'
         #self.add_widget(navbar().nav())
-        self.add_widget(nav())
+        #self.add_widget(nav())
 
         self.box1 = BoxLayout(spacing = 30, pos_hint={'top ':1}, size_hint=(1,0.15),padding=[0,20,0,0])
         self.box1.add_widget(Label(text='Email id: '))
