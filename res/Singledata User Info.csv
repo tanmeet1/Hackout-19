@@ -1,4 +1,4 @@
-UID ,Name,TimeStamp,Height,Weight,Allergy
+UID,Name,TimeStamp,Height,Weight,Allergy
 1,Meet Ranoliya,10/5/2019,160,65,None
 2,Ashish Lalchandani,10/6/2019,165,68,Peanuts
 3,Tanmeet Butani,10/7/2019,182,91,Wheat
@@ -10,15 +10,14 @@ UID ,Name,TimeStamp,Height,Weight,Allergy
 9,Manish Malhotra,10/13/2019,175,78,Citric Acid
 10,Reema Patel,10/14/2019,190,87,Lactic Acid
 3443,dfgf,21:22.7,45,23,sdg
-3,dfgsdg,2019-10-05 11:37:58.741361,gsdg,sdfsdf,ewr
-
-3,fwef,2019-10-05 11:41:56.204601,wef,weffwe,wef
-
-3,sdf,2019-10-05 11:42:37.008190,45,234,sdgf
-
-100,ergerg,2019-10-05 11:57:44.715126,reg,453,geerg
-
-200,dfg,2019-10-05 11:59:42.559979,34,345,fgdhf
-
-100 ,gffdert,2019-10-05 12:05:27.244051,ertert,dfgdfg,ertert
-
+3,dfgsdg,37:58.7,gsdg,sdfsdf,ewr
+,,,,,
+3,fwef,41:56.2,wef,weffwe,wef
+,,,,,
+3,sdf,42:37.0,45,234,sdgf
+,,,,,
+100,ergerg,57:44.7,reg,453,geerg
+,,,,,
+200,dfg,59:42.6,34,345,fgdhf
+,,,,,
+100,gffdert,05:27.2,ertert,dfgdfg,ertert
