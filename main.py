@@ -11,6 +11,7 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from kivy.uix.screenmanager import ScreenManager, Screen
 import datetime
+import csv
 
 
 class index_main(BoxLayout):
@@ -80,15 +81,18 @@ class Update_info(BoxLayout):
     
     def Submit_Callback(self, instance):
         print("Submit Clicked")
-        UserID_Data = str(self.userID.text)
+        UserID_Data = int(self.userID.text)
         UserName_Data = str(self.userName.text)
         Height_data = str(self.hight.text)
         Weight_data = str(self.weight.text)
         Allergy_data = str(self.allergy.text)
         time_data = str(datetime.datetime.now())
-        #fields=[UserID_Data,UserName_Data,time_data,Height_data,Weight_data,Allergy_data]
+        fields=[UserID_Data,UserName_Data,time_data,Height_data,Weight_data,Allergy_data]
 
-        data = pd.read_csv("res/Singledata User Info.csv",names =['UID','Name','Time','Height','Weight','Allergy'])
+        data = pd.read_csv("res/Singledata User Info.csv")
+        
+        #print(data.index)
+        #print(data["UID"])
         data.set_index("UID",inplace=True)
         if UserID_Data in data.index:
             data.loc[UserID_Data]['Name'] = UserName_Data
@@ -96,8 +100,12 @@ class Update_info(BoxLayout):
             data.loc[UserID_Data]["Height"] = Height_data
             data.loc[UserID_Data]["Weight"] = Weight_data
             data.loc[UserID_Data]["Allergy"] = Allergy_data
+            data.to_csv("res/Singledata User Info.csv",index=True)
         else:
-            pass
+            with open("res/Singledata User Info.csv",'a') as dataN:
+                writer = csv.writer(dataN)
+                writer.writerow(fields)
+            dataN.close()
 
         app.screenManager.current = "AfterLogin"
 
@@ -170,7 +178,7 @@ class GetData(BoxLayout):
 
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
-        self.article_read = pd.read_csv("res/Singledata User Info.csv",names =['UID','Name','Time','Height','Weight','Allergy'])
+        #self.article_read = pd.read_csv("res/Singledata User Info.csv",names=["UID","Name","Time","Height","Weight","Allergy"])
         self.add_widget(Label(text="Patient Data"))
         self.orientation = 'vertical'
         # Grid1 = GridLayout(cols = 2)
@@ -181,13 +189,16 @@ class GetData(BoxLayout):
         #self.add_widget(Grid1) 
         
     def update_info(self,pid):
-        print(self.article_read.head())
-        self.add_widget(Label(text=str(self.article_read.UID[self.article_read.UID == pid])))
-        self.add_widget(Label(text=str(self.article_read.Name[self.article_read.UID == pid])))
-        self.add_widget(Label(text=str(self.article_read.Time[self.article_read.UID == pid])))
-        self.add_widget(Label(text=str(self.article_read.Height[self.article_read.UID == pid])))
-        self.add_widget(Label(text=str(self.article_read.Weight[self.article_read.UID == pid])))
-        self.add_widget(Label(text=str(self.article_read.Allergy[self.article_read.UID == pid])))
+        #print(self.article_read.UID)
+        #print(self.article_read.UID == int(pid))
+        self.article_read = pd.read_csv("res/Singledata User Info.csv")
+        comp = self.article_read.UID == int(pid)
+        self.add_widget(Label(text="UID: "+ str(self.article_read.UID[comp].values)))
+        self.add_widget(Label(text="Name: "+str(self.article_read.Name[comp].values)))
+        self.add_widget(Label(text="Time: "+str(self.article_read.Time[comp].values)))
+        self.add_widget(Label(text="Height: "+str(self.article_read.Height[comp].values)))
+        self.add_widget(Label(text="Weight: "+str(self.article_read.Weight[comp].values)))
+        self.add_widget(Label(text="Allergy: "+str(self.article_read.Allergy[comp].values)))
         #print(self.__class__.pid)
 
 
