@@ -15,7 +15,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import datetime
 import csv
-#import navbar
 
 
 def nav():
@@ -195,15 +194,31 @@ class LoginScreen(BoxLayout):
     def callback(self, instance):
         Login_Email = self.email.text
         Login_Password = self.password.text
+
         data = pd.read_csv("res/Login_signup.csv")
-        print(data.iloc[:,0].values,"[\'"+str(Login_Email)+"\']")
-        print(data.iloc[:,1].values,"["+str(Login_Password)+"]" )
+        
+        print(data["email"],"[\'"+str(Login_Email)+"\']")
+        print(data["password"],"["+str(Login_Password)+"]" )
         print(Login_Email,Login_Password)
-        if str(Login_Email) in data.iloc[:,0].values :
-            if str(Login_Password) in data.iloc[:,1].values:
+        
+        print(data["email"])
+        temp = data.set_index("email")
+        print(temp)
+        if Login_Email in temp.index :
+
+            if Login_Password == temp.loc[Login_Email]["password"] :
                 print("Sucess")
                 app.screenManager.current = "AfterLogin"
+            else:
+                print("one")
+                layout = GridLayout(cols = 1, padding = 10) 
+                closeButton = Button(text = "Close the pop-up") 
+                layout.add_widget(closeButton)         
+                popup = Popup(title ='login credentials are Wrong....', content = layout,size_hint=(None, None),size=(420, 120))   
+                popup.open()     
+                closeButton.bind(on_press = popup.dismiss)
         else:
+            print("two")
             layout = GridLayout(cols = 1, padding = 10) 
             closeButton = Button(text = "Close the pop-up") 
             layout.add_widget(closeButton)         
@@ -252,8 +267,11 @@ class SignUp(GridLayout):
             popup.open()     
             closeButton.bind(on_press = popup.dismiss)
         else:
-            data = data.append([str(email),str(password)])
-            data.to_csv("res/Login_signup.csv",index=False)
+            with open("res/Login_signup.csv",'a') as dataN:
+                writer = csv.writer(dataN)
+                writer.writerow([str(email),str(password)])
+            dataN.close()
+            
             layout = GridLayout(cols = 1, padding = 10) 
             closeButton = Button(text = "Close the pop-up") 
             layout.add_widget(closeButton)         
