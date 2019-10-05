@@ -13,7 +13,6 @@ import datetime
 import csv
 import pandas as pd
 
-
 class index_main(BoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
@@ -95,17 +94,19 @@ class Update_info(BoxLayout):
         #print(data["UID"])
         data.set_index("UID",inplace=True)
         if UserID_Data in data.index:
-            data.loc[UserID_Data]['Name'] = UserName_Data
+            data.loc[UserID_Data]["Name"] = UserName_Data
             data.loc[UserID_Data]["Time"] = time_data
             data.loc[UserID_Data]["Height"] = Height_data
             data.loc[UserID_Data]["Weight"] = Weight_data
             data.loc[UserID_Data]["Allergy"] = Allergy_data
-            data.to_csv("res/Singledata User Info.csv",index=True)
+            #data.drop([0],axis=0)
+            print(data)
+            #data.to_csv('out.csv',index=True)
         else:
-            with open("res/Singledata User Info.csv",'a') as dataN:
-                writer = csv.writer(dataN)
-                writer.writerow(fields)
-            dataN.close()
+            with open('res/Singledata User Info.csv','a') as fd:
+                    writer = csv.writer(fd)
+                    writer.writerow(fields)
+
 
         app.screenManager.current = "AfterLogin"
 
@@ -175,7 +176,6 @@ class Update_info(BoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
 
-        #self.article_read = pd.read_csv("res/Singledata User Info.csv",names=["UID","Name","Time","Height","Weight","Allergy"])
         self.add_widget(Label(text="Patient Data"))
         self.orientation = 'vertical'
         # Grid1 = GridLayout(cols = 2)
@@ -186,16 +186,13 @@ class Update_info(BoxLayout):
         #self.add_widget(Grid1) 
         
     def update_info(self,pid):
-        #print(self.article_read.UID)
-        #print(self.article_read.UID == int(pid))
-        self.article_read = pd.read_csv("res/Singledata User Info.csv")
-        comp = self.article_read.UID == int(pid)
-        self.add_widget(Label(text="UID: "+ str(self.article_read.UID[comp].values)))
-        self.add_widget(Label(text="Name: "+str(self.article_read.Name[comp].values)))
-        self.add_widget(Label(text="Time: "+str(self.article_read.Time[comp].values)))
-        self.add_widget(Label(text="Height: "+str(self.article_read.Height[comp].values)))
-        self.add_widget(Label(text="Weight: "+str(self.article_read.Weight[comp].values)))
-        self.add_widget(Label(text="Allergy: "+str(self.article_read.Allergy[comp].values)))
+        self.article_read = pd.read_csv("res/Singledata User Info.csv",names =['UID','Name','Time','Height','Weight','Allergy'])
+        self.add_widget(Label(text=str(self.article_read.UID[self.article_read.UID == pid])))
+        self.add_widget(Label(text=str(self.article_read.Name[self.article_read.UID == pid])))
+        self.add_widget(Label(text=str(self.article_read.Time[self.article_read.UID == pid])))
+        self.add_widget(Label(text=str(self.article_read.Height[self.article_read.UID == pid])))
+        self.add_widget(Label(text=str(self.article_read.Weight[self.article_read.UID == pid])))
+        self.add_widget(Label(text=str(self.article_read.Allergy[self.article_read.UID == pid])))
         #print(self.__class__.pid)
 
 
