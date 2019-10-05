@@ -14,13 +14,51 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import datetime
 import csv
+#import navbar
+
+
+def nav():
+    Grid1 = GridLayout(cols = 5,size_hint=(1.,0.07))
+        
+    index_page = Button(text="Index Main",size_hint=(.5,.5),size=(10,10),on_press=ra)
+    login_page = Button(text="Login",size_hint=(.5,.5),size=(10,10),on_press=rb)
+    signup_page = Button(text="Sign Up",size_hint=(.5,.5),size=(10,10),on_press=rc)
+    # help_page = Button(text="Help",size_hint=(.5,.5),size=(10,10),on_press=rd)
+    # about_page = Button(text ="About",size_hint=(.5,.5),size=(10,10),on_press=re)
+
+    Grid1.add_widget(index_page)
+    Grid1.add_widget(login_page)
+    Grid1.add_widget(signup_page)
+    #Grid1.add_widget(help_page)
+    #Grid1.add_widget(about_page)
+    
+    return Grid1
+
+def ra(instance):
+    app.screenManager.current = "Index"
+
+def rb(instance):
+    app.screenManager.current = "Login"
+
+def rc(instance):
+    app.screenManager.current = "SignUp"
+
+# def rd(instance):
+#     app.screenManager.current = "Help"
+
+# def re(instance):
+#     app.screenManager.current = ""
 
 
 class index_main(BoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
+        self.orientation = 'vertical'
+
+        self.add_widget(nav())
+
         Box1=BoxLayout(orientation= 'vertical', spacing = 20)
-        Box1.add_widget(Label(text="HealthCare"))
+        Box1.add_widget(Label(text="HealthCare (For Doctors)",font_size='30sp'))
         carousel = Carousel(direction='right')
 
         for i in range(1, 5):
@@ -31,15 +69,14 @@ class index_main(BoxLayout):
         Clock.schedule_interval(carousel.load_next,2)
         Box1.add_widget(carousel)
 
-        box2 = BoxLayout(spacing=20)
-        Login =  Button(text='Login', on_press=self.Login_Callback, background_color=(1,0,0,1))
-        Signup =  Button(text='SignUp', on_press=self.Signup_Callback,background_color=(1,0,0,1))
-        box2.add_widget(Login)
-        box2.add_widget(Signup)
-        Box1.add_widget(box2)
-        
+        Grid2 = GridLayout(cols = 2,size_hint=(1.0,0.3),pos_hint={'center x' : 0.7},pos=(10,10))
+        Login = Button(text='Login', on_press=self.Login_Callback)
+        Signup = Button(text='SignUp', on_press=self.Signup_Callback)
+        Grid2.add_widget(Login)
+        Grid2.add_widget(Signup)
+        Box1.add_widget(Grid2)
         self.add_widget(Box1)
-    
+
     def Login_Callback(self, instance):
         print("Login Clicked")
         app.screenManager.current = "Login"
@@ -52,7 +89,12 @@ class index_main(BoxLayout):
 class Update_info(BoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
-    
+        self.orientation='vertical'
+        
+        #Gridr = navbar().nav()
+        #self.add_widget(Gridr)  
+        self.add_widget(nav())      
+        
         Box1=BoxLayout(orientation= 'vertical', spacing = 20)
         Box1.add_widget(Label(text="Update Info"))
         grid = GridLayout(cols = 2)
@@ -116,25 +158,38 @@ class Update_info(BoxLayout):
         app.screenManager.current = "AfterLogin"
 
 
-class LoginScreen(GridLayout):
+
+class LoginScreen(BoxLayout):
     def __init__(self, **kwargs):
-        super(LoginScreen, self).__init__(**kwargs)
-        self.cols = 2
-        self.add_widget(Label(text='Email id: '))
+        super().__init__(**kwargs)
+
+        self.spacing = 150
+        self.orientation='vertical'
+        #self.add_widget(navbar().nav())
+        self.add_widget(nav())
+
+        self.box1 = BoxLayout(spacing = 30, pos_hint={'top ':1}, size_hint=(1,0.15),padding=[0,20,0,0])
+        self.box1.add_widget(Label(text='Email id: '))
         self.email = TextInput(multiline=False)
-        self.add_widget(self.email)
+        self.box1.add_widget(self.email)
 
-        self.add_widget(Label(text='Password: '))
+        self.box2 = BoxLayout(spacing = 30, pos_hint={'center_y':1}, size_hint=(1,0.15),padding=[0,0,0,20])
+        self.box2.add_widget(Label(text='Password: '))
         self.password = TextInput(password=True, multiline=False)
-        self.add_widget(self.password)
+        self.box2.add_widget(self.password)
 
-        login = Button(text='Login')
-        login.bind(on_press=self.callback)
-        self.add_widget(login)
+        self.box3 = BoxLayout(spacing = 30, pos_hint={'center_x':0.5,'center_y':1.25}, size_hint=(1.0,0.20),padding=[0,0,0,80])
+        self.login = Button(text='Login')
+        self.login.bind(on_press=self.callback)
+        self.box3.add_widget(self.login)
 
-        back = Button(text='Return to Main Menu')
-        back.bind(on_press=self.retback)
-        self.add_widget(back)
+        self.back = Button(text='Return to Main Menu')
+        self.back.bind(on_press=self.retback)
+        self.box3.add_widget(self.back)
+
+        self.add_widget(self.box1)
+        self.add_widget(self.box2)
+        self.add_widget(self.box3)
     
     def callback(self, instance):
         print('\n\nLogin as : '+ self.email.text +'\nPassword : '+ self.password.text)
@@ -180,11 +235,11 @@ class GetData(BoxLayout):
 
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
-        #self.article_read = pd.read_csv("res/Singledata User Info.csv",names=["UID","Name","Time","Height","Weight","Allergy"])
-        self.add_widget(Label(text="Patient Data"))
         self.orientation = 'vertical'
+        #self.add_widget(navbar().nav())
+        self.add_widget(nav())
+        self.add_widget(Label(text="Patient Data"))
 
-        
     def update_info(self,pid):
         #print(self.article_read.UID)
         #print(self.article_read.UID == int(pid))
@@ -210,6 +265,9 @@ class ScanUID(BoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.orientation = 'vertical'
+        #self.add_widget(navbar().nav())
+        self.add_widget(nav())
+
         self.Grid1 = GridLayout(cols = 2)
         self.Grid1.add_widget(Label(text = "Enter the Patient ID : "))
         self.userID = TextInput(multiline = False)
@@ -226,11 +284,13 @@ class ScanUID(BoxLayout):
         app.dataPage.update_info(pid)
         app.screenManager.current = "GetData"
 
-
 class AfterLogin(BoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.orientation = 'vertical'
+        #self.add_widget(navbar().nav())
+        self.add_widget(nav())
+
         view = Button(text="View Patient Data")
         view.bind(on_press=self.getuid)
         self.add_widget(view)
@@ -319,6 +379,7 @@ class StepsVisual(BoxLayout):
         ax = sns.lineplot(x_axis,y_axis)
         #ax.set_xticklables(rotation=90)
         plt.xticks(rotation=90)
+        plt.show()
         ax.get_figure().savefig("res/step_data.png")
         
         self.image = AsyncImage(source="res/step_data.png", allow_stretch=True)
@@ -349,6 +410,7 @@ class SleepVisual(BoxLayout):
 
         ax = sns.lineplot(x_axis,y_axis)
         plt.xticks(rotation=90)
+        plt.show()
         ax.get_figure().savefig("res/sleep_data.png")
         
         self.image = AsyncImage(source="res/sleep_data.png", allow_stretch=True)
@@ -379,7 +441,9 @@ class HeartRateVisual(BoxLayout):
 
         ax = sns.lineplot(x_axis,y_axis)
         plt.xticks(rotation=90)
+        plt.show()
         ax.get_figure().savefig("res/heartRate_data.png")
+        
         
         self.image = AsyncImage(source="res/heartRate_data.png", allow_stretch=True)
         self.add_widget(self.image)
@@ -429,6 +493,7 @@ class HealthCare(App):
 
         self.indexPage = index_main()
         indexScreen = Screen(name="Index")
+        #indexScreen.add_widget(navbar())
         indexScreen.add_widget(self.indexPage)
         self.screenManager.add_widget(indexScreen)
 
@@ -487,9 +552,7 @@ class HealthCare(App):
         ppScreen.add_widget(self.ppVisualPage)
         self.screenManager.add_widget(ppScreen)
 
-
         return self.screenManager
-
 
       
 if __name__ == "__main__":
