@@ -18,7 +18,7 @@ import csv
 
 
 def nav():
-    Grid1 = GridLayout(cols = 5,size_hint=(1.,0.07))
+    Grid1 = GridLayout(cols = 5,size_hint=(1.,0.07),row_default_height=35,spacing = 0,row_force_default=True)
         
     index_page = Button(text="Index Main",size_hint=(.5,.5),size=(10,10),on_press=ra)
     login_page = Button(text="Login",size_hint=(.5,.5),size=(10,10),on_press=rb)
@@ -178,7 +178,7 @@ class LoginScreen(BoxLayout):
         self.password = TextInput(password=True, multiline=False)
         self.box2.add_widget(self.password)
 
-        self.box3 = BoxLayout(spacing = 30, pos_hint={'center_x':0.5,'center_y':1.25}, size_hint=(1.0,0.20),padding=[0,0,0,80])
+        self.box3 = BoxLayout(spacing = 30, pos_hint={'center_x':0.5,'center_y':1.25}, size_hint=(1.0,0.20),padding=[50,0,50,35])
         self.login = Button(text='Login')
         self.login.bind(on_press=self.callback)
         self.box3.add_widget(self.login)
@@ -268,15 +268,19 @@ class ScanUID(BoxLayout):
         #self.add_widget(navbar().nav())
         self.add_widget(nav())
 
-        self.Grid1 = GridLayout(cols = 2)
+        self.Grid1 = GridLayout(cols = 2,size_hint=(1,0.22),padding=[0,50,0,0])
         self.Grid1.add_widget(Label(text = "Enter the Patient ID : "))
         self.userID = TextInput(multiline = False)
+        
         self.Grid1.add_widget(self.userID)
-
         self.add_widget(self.Grid1) 
+
+        self.box1 = BoxLayout(spacing=30,padding=[50,380,50,35])
         
         self.submit = Button(text="Submit",on_press=self.submit_pid)
-        self.add_widget(self.submit)
+        self.box1.add_widget(self.submit)
+
+        self.add_widget(self.box1)
     
     def submit_pid(self,instance):
         pid = self.userID.text
@@ -288,20 +292,23 @@ class AfterLogin(BoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.orientation = 'vertical'
+        self.spacing=450
         #self.add_widget(navbar().nav())
         self.add_widget(nav())
+        box2 = BoxLayout(spacing =20,size_hint=(1,0.09), padding=[20,0,20,10])
 
         view = Button(text="View Patient Data")
         view.bind(on_press=self.getuid)
-        self.add_widget(view)
+        box2.add_widget(view)
 
         add = Button(text="Add New Patient")
         add.bind(on_press=self.adduid)
-        self.add_widget(add)
+        box2.add_widget(add)
 
         visual = Button(text="Visualize Patient Data")
         visual.bind(on_press=self.showVisual)
-        self.add_widget(visual)
+        box2.add_widget(visual)
+        self.add_widget(box2)
 
     def getuid(self,instance):
         app.screenManager.current = "GetUID"
