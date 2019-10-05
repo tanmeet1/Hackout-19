@@ -9,6 +9,7 @@ from kivy.clock import Clock
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
+from kivy.uix.popup import Popup 
 from kivy.uix.screenmanager import ScreenManager, Screen
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -192,8 +193,24 @@ class LoginScreen(BoxLayout):
         self.add_widget(self.box3)
     
     def callback(self, instance):
-        print('\n\nLogin as : '+ self.email.text +'\nPassword : '+ self.password.text)
-        app.screenManager.current = "AfterLogin"
+        Login_Email = self.email.text
+        Login_Password = self.password.text
+        data = pd.read_csv("res/Login_signup.csv")
+        print(data.iloc[:,0].values,"[\'"+str(Login_Email)+"\']")
+        print(data.iloc[:,1].values,"["+str(Login_Password)+"]" )
+        print(Login_Email,Login_Password)
+        if str(Login_Email) in data.iloc[:,0].values :
+            if str(Login_Password) in data.iloc[:,1].values:
+                print("Sucess")
+                app.screenManager.current = "AfterLogin"
+        else:
+            layout = GridLayout(cols = 1, padding = 10) 
+            closeButton = Button(text = "Close the pop-up") 
+            layout.add_widget(closeButton)         
+            popup = Popup(title ='login credentials are Wrong....', content = layout,size_hint=(None, None),size=(420, 120))   
+            popup.open()     
+            closeButton.bind(on_press = popup.dismiss)    
+
 
     def retback(self,instance):
         app.screenManager.current = "Index"
@@ -224,8 +241,28 @@ class SignUp(GridLayout):
     def signUpButton(self,instance):
         email = self.email.text
         password = self.password.text
+        data = pd.read_csv("res/Login_signup.csv")
 
-        print(f"Saving details in database\nEmail: {email}\nPassword: {password}")
+        print(data["email"])
+        if str(email) in data["email"]:
+            layout = GridLayout(cols = 1, padding = 10) 
+            closeButton = Button(text = "Close the pop-up") 
+            layout.add_widget(closeButton)         
+            popup = Popup(title ='Email id Is already Present', content = layout,size_hint=(None, None),size=(420, 120))   
+            popup.open()     
+            closeButton.bind(on_press = popup.dismiss)
+        else:
+            data = data.append([str(email),str(password)])
+            data.to_csv("res/Login_signup.csv",index=False)
+            layout = GridLayout(cols = 1, padding = 10) 
+            closeButton = Button(text = "Close the pop-up") 
+            layout.add_widget(closeButton)         
+            popup = Popup(title ='Email add Successfully', content = layout,size_hint=(None, None),size=(420, 120))   
+            popup.open()     
+            closeButton.bind(on_press = popup.dismiss)
+            app.screenManager.current = "Login"
+        
+
 
     def retback(self,instance):
         app.screenManager.current = "Index"
