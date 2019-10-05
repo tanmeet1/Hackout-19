@@ -9,7 +9,9 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from kivy.uix.screenmanager import ScreenManager, Screen
-
+import datetime
+import csv
+import pandas as pd
 
 class index_main(BoxLayout):
     def __init__(self,**kwargs):
@@ -101,7 +103,58 @@ class SignUp(GridLayout):
     def retback(self,instance):
         app.screenManager.current = "Index"
 
+class Update_info(BoxLayout):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+    
+        Box1=BoxLayout(orientation= 'vertical', spacing = 20)
+        Box1.add_widget(Label(text="Update Info"))
+        grid = GridLayout(cols = 2)
+
+        grid.add_widget(Label(text="User ID :",color=(1,0,0,1)))
+        self.userID = TextInput(multiline=False)
+        grid.add_widget(self.userID)
+        grid.add_widget(Label(text="User Name :",color=(1,0,0,1)))
+        self.userName = TextInput(multiline=False)
+        grid.add_widget(self.userName)
+        grid.add_widget(Label(text="Height :",color=(1,0,0,1)))
+        self.hight = TextInput(multiline=False)
+        grid.add_widget(self.hight)
+        grid.add_widget(Label(text="Weight :",color=(1,0,0,1)))
+        self.weight = TextInput(multiline=False)
+        grid.add_widget(self.weight)
+        grid.add_widget(Label(text="Allergy :",color=(1,0,0,1)))
+        self.allergy = TextInput(multiline=False)
+        grid.add_widget(self.allergy)
         
+        self.Submit =  Button(text='Submit', on_press=self.Submit_Callback,color=(0,1,0,1))
+        Back =  Button(text='Back', on_press=self.Back_Callback,color=(0,1,0,1))
+        grid.add_widget(self.Submit)
+        grid.add_widget(Back)
+
+        Box1.add_widget(grid)
+        self.add_widget(Box1)
+    
+    def Submit_Callback(self, instance):
+        print("Submit Clicked")
+        UserID_Data = str(self.userID.text)
+        UserName_Data = str(self.userName.text)
+        Height_data = str(self.hight.text)
+        Weight_data = str(self.weight.text)
+        Allergy_data = str(self.allergy.text)
+        time_data = str(datetime.datetime.now())
+        fields=[UserID_Data,UserName_Data,time_data,Height_data,Weight_data,Allergy_data]
+        # with open('.csv', 'a') as csvFile:
+        #     writer = csv.writer(csvFile)
+        #     writer.writerow(fields)
+        # csvFile.close()
+        app.screenManager.current = "UpdateInfo"
+
+    def Back_Callback(self, instance):
+        print("Back Clicked")
+        app.screenManager.current = "DataScreen"
+
+
 class HealthCare(App):
     def build(self):
         self.screenManager = ScreenManager()
@@ -121,10 +174,15 @@ class HealthCare(App):
         signUpScreen.add_widget(self.signUpPage)
         self.screenManager.add_widget(signUpScreen)
 
+        self.UpdateInfo = Update_info()
+        UpdateInfoScreen = Screen(name="UpdateInfo")
+        UpdateInfoScreen.add_widget(self.UpdateInfo)
+        self.screenManager.add_widget(UpdateInfoScreen)
+
         return self.screenManager
 
 
-      
+
 if __name__ == "__main__":
     app = HealthCare()
     app.run()
