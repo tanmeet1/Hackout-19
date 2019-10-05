@@ -10,6 +10,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from kivy.uix.screenmanager import ScreenManager, Screen
+import datetime
 
 
 class index_main(BoxLayout):
@@ -43,6 +44,66 @@ class index_main(BoxLayout):
     def Signup_Callback(self, instance):
         print("Signup Clicked")
         app.screenManager.current = "SignUp"
+
+
+class Update_info(BoxLayout):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+    
+        Box1=BoxLayout(orientation= 'vertical', spacing = 20)
+        Box1.add_widget(Label(text="Update Info"))
+        grid = GridLayout(cols = 2)
+
+        grid.add_widget(Label(text="User ID :",color=(1,0,0,1)))
+        self.userID = TextInput(multiline=False)
+        grid.add_widget(self.userID)
+        grid.add_widget(Label(text="User Name :",color=(1,0,0,1)))
+        self.userName = TextInput(multiline=False)
+        grid.add_widget(self.userName)
+        grid.add_widget(Label(text="Height :",color=(1,0,0,1)))
+        self.hight = TextInput(multiline=False)
+        grid.add_widget(self.hight)
+        grid.add_widget(Label(text="Weight :",color=(1,0,0,1)))
+        self.weight = TextInput(multiline=False)
+        grid.add_widget(self.weight)
+        grid.add_widget(Label(text="Allergy :",color=(1,0,0,1)))
+        self.allergy = TextInput(multiline=False)
+        grid.add_widget(self.allergy)
+        
+        self.Submit =  Button(text='Submit', on_press=self.Submit_Callback,color=(0,1,0,1))
+        Back =  Button(text='Back', on_press=self.Back_Callback,color=(0,1,0,1))
+        grid.add_widget(self.Submit)
+        grid.add_widget(Back)
+
+        Box1.add_widget(grid)
+        self.add_widget(Box1)
+    
+    def Submit_Callback(self, instance):
+        print("Submit Clicked")
+        UserID_Data = str(self.userID.text)
+        UserName_Data = str(self.userName.text)
+        Height_data = str(self.hight.text)
+        Weight_data = str(self.weight.text)
+        Allergy_data = str(self.allergy.text)
+        time_data = str(datetime.datetime.now())
+        #fields=[UserID_Data,UserName_Data,time_data,Height_data,Weight_data,Allergy_data]
+
+        data = pd.read_csv("res/Singledata User Info.csv",names =['UID','Name','Time','Height','Weight','Allergy'])
+        data.set_index("UID",inplace=True)
+        if UserID_Data in data.index:
+            data.loc[UserID_Data]['Name'] = UserName_Data
+            data.loc[UserID_Data]["Time"] = time_data
+            data.loc[UserID_Data]["Height"] = Height_data
+            data.loc[UserID_Data]["Weight"] = Weight_data
+            data.loc[UserID_Data]["Allergy"] = Allergy_data
+        else:
+            pass
+
+        app.screenManager.current = "AfterLogin"
+
+    def Back_Callback(self, instance):
+        print("Back Clicked")
+        app.screenManager.current = "AfterLogin"
 
 
 class LoginScreen(GridLayout):
@@ -119,17 +180,6 @@ class GetData(BoxLayout):
 
         #self.add_widget(Grid1) 
         
-        #self.submit = Button(text="Submit",on_press=self.submit_pid)
-        #self.add_widget(self.submit)
-        #self.add_widget(Label(text=str(article_read.UID[article_read.UID == self.__class__.pid])))
-        # self.add_widget(Label(text=str(article_read[article_read.name[article_read.uid == self.__class__.pid]])))
-        # self.add_widget(Label(text=str(article_read[article_read.time[article_read.uid == self.__class__.pid]])))
-        # self.add_widget(Label(text=str(article_read[article_read.height[article_read.uid == self.__class__.pid]])))
-        # self.add_widget(Label(text=str(article_read[article_read.weight[article_read.uid == self.__class__.pid]])))
-        # self.add_widget(Label(text=str(article_read[article_read.allergy[article_read.uid == self.__class__.pid]])))
-
-    # def submit_pid(self,instance):
-    #     self.Grid1.pid = self.Grid1.uid.text
     def update_info(self,pid):
         print(self.article_read.head())
         self.add_widget(Label(text=str(self.article_read.UID[self.article_read.UID == pid])))
@@ -171,13 +221,14 @@ class AfterLogin(BoxLayout):
         self.add_widget(view)
 
         add = Button(text="Add New Patient")
-        view.bind(on_press=self.adduid)
+        add.bind(on_press=self.adduid)
         self.add_widget(add)
 
     def getuid(self,instance):
         app.screenManager.current = "GetUID"
     def adduid(self,instance):
-        pass
+        app.screenManager.current = "UpdateInfo"
+
 
 class HealthCare(App):
     def build(self):
@@ -212,6 +263,11 @@ class HealthCare(App):
         getUIDScreen  = Screen (name = "GetUID")
         getUIDScreen.add_widget(self.getUIDPage)
         self.screenManager.add_widget(getUIDScreen)
+
+        self.UpdateInfo = Update_info()
+        UpdateInfoScreen = Screen(name="UpdateInfo")
+        UpdateInfoScreen.add_widget(self.UpdateInfo)
+        self.screenManager.add_widget(UpdateInfoScreen)
 
         return self.screenManager
 
