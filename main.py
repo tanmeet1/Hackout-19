@@ -181,12 +181,7 @@ class GetData(BoxLayout):
         #self.article_read = pd.read_csv("res/Singledata User Info.csv",names=["UID","Name","Time","Height","Weight","Allergy"])
         self.add_widget(Label(text="Patient Data"))
         self.orientation = 'vertical'
-        # Grid1 = GridLayout(cols = 2)
-        # Grid1.add_widget(Label(text = "Enter the Patient ID : "))
-        # Grid1.uid = TextInput(multiline = False)
-        # Grid1.add_widget(Grid1.pid)
 
-        #self.add_widget(Grid1) 
         
     def update_info(self,pid):
         #print(self.article_read.UID)
@@ -195,12 +190,18 @@ class GetData(BoxLayout):
         comp = self.article_read.UID == int(pid)
         self.add_widget(Label(text="UID: "+ str(self.article_read.UID[comp].values)))
         self.add_widget(Label(text="Name: "+str(self.article_read.Name[comp].values)))
-        self.add_widget(Label(text="Time: "+str(self.article_read.Time[comp].values)))
+        self.add_widget(Label(text="Time: "+str(self.article_read.TimeStamp[comp].values)))
         self.add_widget(Label(text="Height: "+str(self.article_read.Height[comp].values)))
         self.add_widget(Label(text="Weight: "+str(self.article_read.Weight[comp].values)))
         self.add_widget(Label(text="Allergy: "+str(self.article_read.Allergy[comp].values)))
         #print(self.__class__.pid)
 
+        back = Button(text='Back')
+        back.bind(on_press=self.retback)
+        self.add_widget(back)
+
+    def retback(self,instance):
+        app.screenManager.current = "AfterLogin"
 
 class ScanUID(BoxLayout):
     
@@ -227,6 +228,7 @@ class ScanUID(BoxLayout):
 class AfterLogin(BoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
+        self.orientation = 'vertical'
         view = Button(text="View Patient Data")
         view.bind(on_press=self.getuid)
         self.add_widget(view)
@@ -235,10 +237,62 @@ class AfterLogin(BoxLayout):
         add.bind(on_press=self.adduid)
         self.add_widget(add)
 
+        visual = Button(text="Visualize Patient Data")
+        visual.bind(on_press=self.showVisual)
+        self.add_widget(visual)
+
     def getuid(self,instance):
         app.screenManager.current = "GetUID"
     def adduid(self,instance):
         app.screenManager.current = "UpdateInfo"
+    def showVisual(self,instance):
+        app.screenManager.current = "VisualMenu"
+
+
+class VisualMenu(BoxLayout):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.orientation = 'vertical'
+
+        self.userID = TextInput(text="Add UserID here",multiline=False)
+        self.add_widget(self.userID)
+
+        self.steps = Button(text="Steps")
+        self.steps.bind(on_press=self.showSteps)
+        self.add_widget(self.steps)
+
+        self.sleep = Button(text="Sleep")
+        self.sleep.bind(on_press=self.showSleep)
+        self.add_widget(self.sleep)
+
+        self.heartRate = Button(text="Heart Rate")
+        self.heartRate.bind(on_press=self.showHeartRate)
+        self.add_widget(self.heartRate)
+
+        self.pp = Button(text="Past Prescriptions")
+        self.pp.bind(on_press=self.showPP)
+        self.add_widget(self.pp)
+
+
+    def showSteps(self,instance):
+        userID = self.userID.text
+        app.stepsScreen.setUID(userID)
+        app.screenManager.current = ""
+
+    def showSleep(self,instance):
+        userID = self.userID.text
+        app.sleepScreen.setUID(userID)
+        app.screenManager.current = ""
+
+    def showHeartRate(self,instance):
+        userID = self.userID.text
+        app.heartRateScreen.setUID(userID)
+        app.screenManager.current = ""
+
+    def showPP(self,instance):
+        userID = self.userID.text
+        app.PPScreen.setUID(userID)
+        app.screenManager.current = ""
 
 
 class HealthCare(App):
@@ -279,6 +333,11 @@ class HealthCare(App):
         UpdateInfoScreen = Screen(name="UpdateInfo")
         UpdateInfoScreen.add_widget(self.UpdateInfo)
         self.screenManager.add_widget(UpdateInfoScreen)
+
+        self.VisualMenuPage = VisualMenu()
+        VisualMenuScreen = Screen(name="VisualMenu")
+        VisualMenuScreen.add_widget(self.VisualMenuPage)
+        self.screenManager.add_widget(VisualMenuScreen)
 
         return self.screenManager
 

@@ -1,0 +1,141 @@
+UID,Name,TimeStamp,Steps,Sleep,HR
+1,Meet Ranoliya,20-09-2019,5000,6,75
+1,Meet Ranoliya,21-09-2019,7500,8,82
+1,Meet Ranoliya,22-09-2019,6500,7,80
+1,Meet Ranoliya,23-09-2019,6700,4,81
+1,Meet Ranoliya,24-09-2019,8000,5,86
+1,Meet Ranoliya,25-09-2019,7600,8,70
+1,Meet Ranoliya,26-09-2019,10000,9,72
+1,Meet Ranoliya,27-09-2019,3000,10,80
+1,Meet Ranoliya,28-09-2019,4500,13,81
+1,Meet Ranoliya,29-09-2019,7800,8,85
+1,Meet Ranoliya,30-09-2019,9000,7,98
+1,Meet Ranoliya,01-10-2019,8700,5,104
+1,Meet Ranoliya,02-10-2019,9650,4,69
+1,Meet Ranoliya,03-10-2019,9984,9,81
+2,Ashish Lalchandani,20-09-2019,4564,7,72
+2,Ashish Lalchandani,21-09-2019,2342,8,79
+2,Ashish Lalchandani,22-09-2019,1554,10,98
+2,Ashish Lalchandani,23-09-2019,8742,12,100
+2,Ashish Lalchandani,24-09-2019,5846,4,87
+2,Ashish Lalchandani,25-09-2019,6897,7,76
+2,Ashish Lalchandani,26-09-2019,6478,9,81
+2,Ashish Lalchandani,27-09-2019,4846,7,86
+2,Ashish Lalchandani,28-09-2019,6468,6,94
+2,Ashish Lalchandani,29-09-2019,6795,12,92
+2,Ashish Lalchandani,30-09-2019,2648,6,78
+2,Ashish Lalchandani,01-10-2019,2676,7,77
+2,Ashish Lalchandani,02-10-2019,2697,9,99
+2,Ashish Lalchandani,03-10-2019,9897,11,73
+3,Tanmeet Butani,20-09-2019,1368,7,74
+3,Tanmeet Butani,21-09-2019,1978,7,76
+3,Tanmeet Butani,22-09-2019,2016,8,79
+3,Tanmeet Butani,23-09-2019,2436,9,80
+3,Tanmeet Butani,24-09-2019,2011,4,83
+3,Tanmeet Butani,25-09-2019,2658,6,93
+3,Tanmeet Butani,26-09-2019,2857,9,85
+3,Tanmeet Butani,27-09-2019,5555,10,86
+3,Tanmeet Butani,28-09-2019,3634,9,88
+3,Tanmeet Butani,29-09-2019,4864,8,81
+3,Tanmeet Butani,30-09-2019,4216,5,89
+3,Tanmeet Butani,01-10-2019,3459,8,79
+3,Tanmeet Butani,02-10-2019,3639,5,86
+3,Tanmeet Butani,03-10-2019,5987,9,88
+4,Vatsal Parsaniya,20-09-2019,5987,6,77
+4,Vatsal Parsaniya,21-09-2019,5962,7,76
+4,Vatsal Parsaniya,22-09-2019,5795,7,74
+4,Vatsal Parsaniya,23-09-2019,6105,8,79
+4,Vatsal Parsaniya,24-09-2019,6655,8,85
+4,Vatsal Parsaniya,25-09-2019,7941,7,78
+4,Vatsal Parsaniya,26-09-2019,7465,12,78
+4,Vatsal Parsaniya,27-09-2019,4439,5,75
+4,Vatsal Parsaniya,28-09-2019,7821,7,74
+4,Vatsal Parsaniya,29-09-2019,8001,8,76
+4,Vatsal Parsaniya,30-09-2019,7725,8,73
+4,Vatsal Parsaniya,01-10-2019,8542,6,76
+4,Vatsal Parsaniya,02-10-2019,7625,7,80
+4,Vatsal Parsaniya,03-10-2019,6969,8,77
+5,Yash Bokil,20-09-2019,7500,7,79
+5,Yash Bokil,21-09-2019,7891,8,77
+5,Yash Bokil,22-09-2019,7500,8,79
+5,Yash Bokil,23-09-2019,7412,9,80
+5,Yash Bokil,24-09-2019,5557,6,79
+5,Yash Bokil,25-09-2019,6784,8,75
+5,Yash Bokil,26-09-2019,7984,9,82
+5,Yash Bokil,27-09-2019,8011,7,80
+5,Yash Bokil,28-09-2019,7892,6,73
+5,Yash Bokil,29-09-2019,7634,10,78
+5,Yash Bokil,30-09-2019,7521,8,84
+5,Yash Bokil,01-10-2019,8881,7,89
+5,Yash Bokil,02-10-2019,7469,8,85
+5,Yash Bokil,03-10-2019,7631,7,81
+6,Twinkle Bhimani,20-09-2019,9875,9,86
+6,Twinkle Bhimani,21-09-2019,9999,8,94
+6,Twinkle Bhimani,22-09-2019,8954,7,91
+6,Twinkle Bhimani,23-09-2019,8632,11,86
+6,Twinkle Bhimani,24-09-2019,9164,10,86
+6,Twinkle Bhimani,25-09-2019,11014,8,97
+6,Twinkle Bhimani,26-09-2019,9873,9,90
+6,Twinkle Bhimani,27-09-2019,9323,8,91
+6,Twinkle Bhimani,28-09-2019,10152,9,85
+6,Twinkle Bhimani,29-09-2019,7651,11,86
+6,Twinkle Bhimani,30-09-2019,8631,8,90
+6,Twinkle Bhimani,01-10-2019,8888,9,92
+6,Twinkle Bhimani,02-10-2019,9104,9,91
+6,Twinkle Bhimani,03-10-2019,6123,9,89
+7,Jinish Shah,20-09-2019,4256,6,90
+7,Jinish Shah,21-09-2019,5555,7,100
+7,Jinish Shah,22-09-2019,3361,5,95
+7,Jinish Shah,23-09-2019,3964,6,91
+7,Jinish Shah,24-09-2019,4100,5,89
+7,Jinish Shah,25-09-2019,4123,8,92
+7,Jinish Shah,26-09-2019,3363,7,90
+7,Jinish Shah,27-09-2019,3613,8,92
+7,Jinish Shah,28-09-2019,5012,7,86
+7,Jinish Shah,29-09-2019,4622,6,83
+7,Jinish Shah,30-09-2019,4521,8,91
+7,Jinish Shah,01-10-2019,3100,7,86
+7,Jinish Shah,02-10-2019,3564,6,88
+7,Jinish Shah,03-10-2019,5101,4,69
+8, Rajesh Thanki,20-09-2019,5623,4,81
+8, Rajesh Thanki,21-09-2019,6213,3,85
+8, Rajesh Thanki,22-09-2019,5012,6,89
+8, Rajesh Thanki,23-09-2019,6100,5,82
+8, Rajesh Thanki,24-09-2019,5546,4,88
+8, Rajesh Thanki,25-09-2019,5123,4,87
+8, Rajesh Thanki,26-09-2019,4412,8,79
+8, Rajesh Thanki,27-09-2019,4128,3,88
+8, Rajesh Thanki,28-09-2019,4876,4,87
+8, Rajesh Thanki,29-09-2019,5201,3,91
+8, Rajesh Thanki,30-09-2019,5632,4,85
+8, Rajesh Thanki,01-10-2019,1200,5,81
+8, Rajesh Thanki,02-10-2019,2000,6,79
+8, Rajesh Thanki,03-10-2019,4000,5,80
+9,Manish Malhotra,20-09-2019,8495,7,73
+9,Manish Malhotra,21-09-2019,2684,4,84
+9,Manish Malhotra,22-09-2019,8974,9,99
+9,Manish Malhotra,23-09-2019,4842,10,92
+9,Manish Malhotra,24-09-2019,8756,11,78
+9,Manish Malhotra,25-09-2019,9621,5,98
+9,Manish Malhotra,26-09-2019,5762,6,81
+9,Manish Malhotra,27-09-2019,7624,8,70
+9,Manish Malhotra,28-09-2019,3564,4,76
+9,Manish Malhotra,29-09-2019,4253,7,89
+9,Manish Malhotra,30-09-2019,8455,5,94
+9,Manish Malhotra,01-10-2019,4657,12,69
+9,Manish Malhotra,02-10-2019,2644,9,102
+9,Manish Malhotra,03-10-2019,9791,6,77
+10,Reema Patel,20-09-2019,1515,7,88
+10,Reema Patel,21-09-2019,8921,12,75
+10,Reema Patel,22-09-2019,7534,4,94
+10,Reema Patel,23-09-2019,6486,6,86
+10,Reema Patel,24-09-2019,4569,9,81
+10,Reema Patel,25-09-2019,1534,7,72
+10,Reema Patel,26-09-2019,4568,11,91
+10,Reema Patel,27-09-2019,8426,6,73
+10,Reema Patel,28-09-2019,9713,10,102
+10,Reema Patel,29-09-2019,4561,4,75
+10,Reema Patel,30-09-2019,9843,9,93
+10,Reema Patel,01-10-2019,7846,5,86
+10,Reema Patel,02-10-2019,9746,10,79
+10,Reema Patel,03-10-2019,3545,7,99
