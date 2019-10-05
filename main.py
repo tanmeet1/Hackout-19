@@ -1,5 +1,4 @@
 import kivy
-import pandas as pd
 from kivy.app import App
 from kivy.uix.carousel import Carousel
 from kivy.uix.image import AsyncImage
@@ -12,13 +11,14 @@ from kivy.uix.button import Button
 from kivy.uix.screenmanager import ScreenManager, Screen
 import datetime
 import csv
+import pandas as pd
 
 class index_main(BoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         Box1=BoxLayout(orientation= 'vertical', spacing = 20)
         Box1.add_widget(Label(text="HealthCare"))
-        carousel = Carousel(direction='right')
+        carousel = Carousel(direction='left')
 
         for i in range(1, 5):
             src = "res/%s.jpg" % str(i)
@@ -137,8 +137,6 @@ class LoginScreen(GridLayout):
     
     def callback(self, instance):
         print('\n\nLogin as : '+ self.email.text +'\nPassword : '+ self.password.text)
-        app.screenManager.current = "AfterLogin"
-
     def retback(self,instance):
         app.screenManager.current = "Index"
 
@@ -174,11 +172,10 @@ class SignUp(GridLayout):
     def retback(self,instance):
         app.screenManager.current = "Index"
 
-
-class GetData(BoxLayout):
-
+class Update_info(BoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
+
         self.add_widget(Label(text="Patient Data"))
         self.orientation = 'vertical'
         # Grid1 = GridLayout(cols = 2)
@@ -199,34 +196,33 @@ class GetData(BoxLayout):
         #print(self.__class__.pid)
 
 
+        
 class ScanUID(BoxLayout):
     
-    def __init__(self,**kwargs):
-        super().__init__(**kwargs)
-        self.orientation = 'vertical'
-        self.Grid1 = GridLayout(cols = 2)
-        self.Grid1.add_widget(Label(text = "Enter the Patient ID : "))
-        self.userID = TextInput(multiline = False)
-        self.Grid1.add_widget(self.userID)
+        Box1=BoxLayout(orientation= 'vertical', spacing = 20)
+        Box1.add_widget(Label(text="Update Info"))
+        grid = GridLayout(cols = 2)
 
-        self.add_widget(self.Grid1) 
+        grid.add_widget(Label(text="User ID :",color=(1,0,0,1)))
+        self.userID = TextInput(multiline=False)
+        grid.add_widget(self.userID)
+        grid.add_widget(Label(text="User Name :",color=(1,0,0,1)))
+        self.userName = TextInput(multiline=False)
+        grid.add_widget(self.userName)
+        grid.add_widget(Label(text="Height :",color=(1,0,0,1)))
+        self.hight = TextInput(multiline=False)
+        grid.add_widget(self.hight)
+        grid.add_widget(Label(text="Weight :",color=(1,0,0,1)))
+        self.weight = TextInput(multiline=False)
+        grid.add_widget(self.weight)
+        grid.add_widget(Label(text="Allergy :",color=(1,0,0,1)))
+        self.allergy = TextInput(multiline=False)
+        grid.add_widget(self.allergy)
         
-        self.submit = Button(text="Submit",on_press=self.submit_pid)
-        self.add_widget(self.submit)
-    
-    def submit_pid(self,instance):
-        pid = self.userID.text
-        print(pid)
-        app.dataPage.update_info(pid)
-        app.screenManager.current = "GetData"
-
-
-class AfterLogin(BoxLayout):
-    def __init__(self,**kwargs):
-        super().__init__(**kwargs)
-        view = Button(text="View Patient Data")
-        view.bind(on_press=self.getuid)
-        self.add_widget(view)
+        self.Submit =  Button(text='Submit', on_press=self.Submit_Callback,color=(0,1,0,1))
+        Back =  Button(text='Back', on_press=self.Back_Callback,color=(0,1,0,1))
+        grid.add_widget(self.Submit)
+        grid.add_widget(Back)
 
         add = Button(text="Add New Patient")
         add.bind(on_press=self.adduid)
@@ -236,6 +232,29 @@ class AfterLogin(BoxLayout):
         app.screenManager.current = "GetUID"
     def adduid(self,instance):
         app.screenManager.current = "UpdateInfo"
+        Box1.add_widget(grid)
+        self.add_widget(Box1)
+    
+    
+    def Submit_Callback(self, instance):
+        print("Submit Clicked")
+        UserID_Data = str(self.userID.text)
+        UserName_Data = str(self.userName.text)
+        Height_data = str(self.hight.text)
+        Weight_data = str(self.weight.text)
+        Allergy_data = str(self.allergy.text)
+        time_data = str(datetime.datetime.now())
+        fields=[UserID_Data,UserName_Data,time_data,Height_data,Weight_data,Allergy_data]
+        # with open('.csv', 'a') as csvFile:
+        #     writer = csv.writer(csvFile)
+        #     writer.writerow(fields)
+        # csvFile.close()
+        app.screenManager.current = "UpdateInfo"
+
+    def Back_Callback(self, instance):
+        print("Back Clicked")
+        app.screenManager.current = "DataScreen"
+
 
 
 class HealthCare(App):
@@ -257,20 +276,10 @@ class HealthCare(App):
         signUpScreen.add_widget(self.signUpPage)
         self.screenManager.add_widget(signUpScreen)
 
-        self.dataPage = GetData()
-        dataScreen = Screen (name = "GetData")
-        dataScreen.add_widget(self.dataPage)
-        self.screenManager.add_widget(dataScreen)
-
-        self.afterLoginPage = AfterLogin()
-        afterLoginScreen  = Screen (name = "AfterLogin")
-        afterLoginScreen.add_widget(self.afterLoginPage)
-        self.screenManager.add_widget(afterLoginScreen)
-
-        self.getUIDPage = ScanUID()
-        getUIDScreen  = Screen (name = "GetUID")
-        getUIDScreen.add_widget(self.getUIDPage)
-        self.screenManager.add_widget(getUIDScreen)
+        self.UpdateInfo = Update_info()
+        UpdateInfoScreen = Screen(name="UpdateInfo")
+        UpdateInfoScreen.add_widget(self.UpdateInfo)
+        self.screenManager.add_widget(UpdateInfoScreen)
 
         self.UpdateInfo = Update_info()
         UpdateInfoScreen = Screen(name="UpdateInfo")
@@ -280,7 +289,7 @@ class HealthCare(App):
         return self.screenManager
 
 
-      
+
 if __name__ == "__main__":
     app = HealthCare()
     app.run()
