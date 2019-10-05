@@ -271,7 +271,6 @@ class SignUp(GridLayout):
                 writer = csv.writer(dataN)
                 writer.writerow([str(email),str(password)])
             dataN.close()
-            
             layout = GridLayout(cols = 1, padding = 10) 
             closeButton = Button(text = "Close the pop-up") 
             layout.add_widget(closeButton)         
