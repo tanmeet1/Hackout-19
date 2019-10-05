@@ -283,34 +283,34 @@ class VisualMenu(BoxLayout):
 
     def showSleep(self,instance):
         userID = self.userID.text
-        app.sleepScreen.setUID(userID)
-        app.screenManager.current = ""
+        app.sleepVisualPage.setUID(userID)
+        app.screenManager.current = "SleepVisual"
 
     def showHeartRate(self,instance):
         userID = self.userID.text
-        app.heartRateScreen.setUID(userID)
-        app.screenManager.current = ""
+        app.heartRateVisualPage.setUID(userID)
+        app.screenManager.current = "HeartRateVisual"
 
     def showPP(self,instance):
         userID = self.userID.text
-        app.PPScreen.setUID(userID)
-        app.screenManager.current = ""
+        app.PPVisualPage.setUID(userID)
+        app.screenManager.current = "PPVisual"
 
 
 class StepsVisual(BoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.orientation = 'vertical'
-        self.add_widget(Label(text="Steps Data"))
+        self.add_widget(Label(text="Steps Data",size_hint=(0.25,0.25),pos_hint={'top ':1,'center_x':0.5}))
 
     def setUID(self,UID):
         data = pd.read_csv('res/Multidata User Info1.csv')
         
-        sleep_data = data[data.UID==int(UID)]
+        step_data = data[data.UID==int(UID)]
         #print(sleep_data)
 
-        x_axis = sleep_data.TimeStamp
-        y_axis = sleep_data.Steps
+        x_axis = step_data.TimeStamp
+        y_axis = step_data.Steps
 
         #print(x_axis)
         #print(y_axis)
@@ -324,14 +324,104 @@ class StepsVisual(BoxLayout):
         self.image = AsyncImage(source="res/step_data.png", allow_stretch=True)
         self.add_widget(self.image)
         
-        self.back_button = Button(text="Back",on_press=self.Back_callBack,size_hint=(0.25,0.25))
+        self.back_button = Button(text="Back",on_press=self.Back_callBack,size_hint=(0.25,0.25),pos_hint={'top ':1,'center_x':0.5})
         self.add_widget(self.back_button)
 
     def Back_callBack(self,instance):
         self.remove_widget(self.image)
         self.remove_widget(self.back_button)
         app.screenManager.current = "VisualMenu"
+
+    
+class SleepVisual(BoxLayout):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.orientation = 'vertical'
+        self.add_widget(Label(text="Sleep Data",size_hint=(0.25,0.25),pos_hint={'top ':1,'center_x':0.5}))
+
+    def setUID(self,UID):
+        data = pd.read_csv('res/Multidata User Info1.csv')
         
+        sleep_data = data[data.UID==int(UID)]
+
+        x_axis = sleep_data.TimeStamp
+        y_axis = sleep_data.Sleep
+
+        ax = sns.lineplot(x_axis,y_axis)
+        plt.xticks(rotation=90)
+        ax.get_figure().savefig("res/sleep_data.png")
+        
+        self.image = AsyncImage(source="res/sleep_data.png", allow_stretch=True)
+        self.add_widget(self.image)
+        
+        self.back_button = Button(text="Back",on_press=self.Back_callBack,size_hint=(0.25,0.25),pos_hint={'top ':1,'center_x':0.5})
+        self.add_widget(self.back_button)
+
+    def Back_callBack(self,instance):
+        self.remove_widget(self.image)
+        self.remove_widget(self.back_button)
+        app.screenManager.current = "VisualMenu"
+
+
+class HeartRateVisual(BoxLayout):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.orientation = 'vertical'
+        self.add_widget(Label(text="HeartRate Data",size_hint=(0.25,0.25),pos_hint={'top ':1,'center_x':0.5}))
+
+    def setUID(self,UID):
+        data = pd.read_csv('res/Multidata User Info1.csv')
+        
+        heartRate_data = data[data.UID==int(UID)]
+
+        x_axis = heartRate_data.TimeStamp
+        y_axis = heartRate_data.HR
+
+        ax = sns.lineplot(x_axis,y_axis)
+        plt.xticks(rotation=90)
+        ax.get_figure().savefig("res/heartRate_data.png")
+        
+        self.image = AsyncImage(source="res/heartRate_data.png", allow_stretch=True)
+        self.add_widget(self.image)
+        
+        self.back_button = Button(text="Back",on_press=self.Back_callBack,size_hint=(0.25,0.25),pos_hint={'top ':1,'center_x':0.5})
+        self.add_widget(self.back_button)
+
+    def Back_callBack(self,instance):
+        self.remove_widget(self.image)
+        self.remove_widget(self.back_button)
+        app.screenManager.current = "VisualMenu"
+
+
+class PPVisual(BoxLayout):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.orientation = 'vertical'
+        self.add_widget(Label(text="Past Prescription Data",size_hint=(0.25,0.25),pos_hint={'top ':1,'center_x':0.5}))
+
+    def setUID(self,UID):
+        data = pd.read_csv('res/Multidata User Info1.csv')
+        
+        # sleep_data = data[data.UID==int(UID)]
+
+        # x_axis = sleep_data.TimeStamp
+        # y_axis = sleep_data.Sleep
+
+        # ax = sns.lineplot(x_axis,y_axis)
+        # plt.xticks(rotation=90)
+        # ax.get_figure().savefig("res/pp_data.png")
+        
+        # self.image = AsyncImage(source="res/pp_data.png", allow_stretch=True)
+        # self.add_widget(self.image)
+        
+        self.back_button = Button(text="Back",on_press=self.Back_callBack,size_hint=(0.25,0.25),pos_hint={'top ':1,'center_x':0.5})
+        self.add_widget(self.back_button)
+
+    def Back_callBack(self,instance):
+        self.remove_widget(self.image)
+        self.remove_widget(self.back_button)
+        app.screenManager.current = "VisualMenu"
+
 
 class HealthCare(App):
     def build(self):
@@ -381,6 +471,21 @@ class HealthCare(App):
         stepScreen = Screen(name="StepsVisual")
         stepScreen.add_widget(self.stepsVisualPage)
         self.screenManager.add_widget(stepScreen)
+
+        self.sleepVisualPage = SleepVisual()
+        sleepScreen = Screen(name="SleepVisual")
+        sleepScreen.add_widget(self.sleepVisualPage)
+        self.screenManager.add_widget(sleepScreen)
+
+        self.heartRateVisualPage = HeartRateVisual()
+        heartRateScreen = Screen(name="HeartRateVisual")
+        heartRateScreen.add_widget(self.heartRateVisualPage)
+        self.screenManager.add_widget(heartRateScreen)
+
+        self.ppVisualPage = PPVisual()
+        ppScreen = Screen(name="PPVisual")
+        ppScreen.add_widget(self.ppVisualPage)
+        self.screenManager.add_widget(ppScreen)
 
 
         return self.screenManager
