@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
+    "python.pythonPath": "C:\\Users\\vatsa\\AppData\\Local\\Programs\\Python\\Python37-32\\python.exe",
+=======
     "python.pythonPath": "kivy_venv\\Scripts\\python.exe",
+>>>>>>> dd73dc56f616b9ed493fab13398eb0b2cb5e1fda
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true
 }
