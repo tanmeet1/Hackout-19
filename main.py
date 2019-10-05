@@ -10,6 +10,8 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from kivy.uix.screenmanager import ScreenManager, Screen
+import matplotlib.pyplot as plt
+import seaborn as sns
 import datetime
 import csv
 
@@ -30,8 +32,8 @@ class index_main(BoxLayout):
         Box1.add_widget(carousel)
 
         box2 = BoxLayout(spacing=20)
-        Login =  Button(text='Login', on_press=self.Login_Callback)
-        Signup =  Button(text='SignUp', on_press=self.Signup_Callback)
+        Login =  Button(text='Login', on_press=self.Login_Callback, background_color=(1,0,0,1))
+        Signup =  Button(text='SignUp', on_press=self.Signup_Callback,background_color=(1,0,0,1))
         box2.add_widget(Login)
         box2.add_widget(Signup)
         Box1.add_widget(box2)
@@ -241,9 +243,35 @@ class AfterLogin(BoxLayout):
         app.screenManager.current = "UpdateInfo"
 
 
+class Stepsdata_viz(BoxLayout):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        DataFrame = pd.read_csv('res/Multidata User Info1.csv',error_bad_lines=False,encoding="latin1",names=["UID","Name","TimeStamp","Steps","Sleep","HR"])
+        userid = 2
+        sleep_data = DataFrame[DataFrame.UID == userid]
+        x_axis = sleep_data.TimeStamp.values
+        y_axis = sleep_data.Steps.values
+        ax = sns.lineplot(x_axis,y_axis)
+        ax.get_figure().savefig("step_data.png")
+        image = AsyncImage(source="res/step_data.png", allow_stretch=True)
+        self.add_widget(image)
+        back_button = Button(text="Back",on_press=self.Back_callBack)
+
+    def Back_callBack(self,instance):
+        app.screenManager.current = ""
+        
+        
+        
+
+
 class HealthCare(App):
     def build(self):
         self.screenManager = ScreenManager()
+
+        # self.stepGraph = Stepsdata_viz()
+        # stepscreen = Screen(name="Index")
+        # stepscreen.add_widget(self.stepGraph)
+        # self.screenManager.add_widget(stepscreen)
 
         self.indexPage = index_main()
         indexScreen = Screen(name="Index")
