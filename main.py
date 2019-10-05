@@ -10,6 +10,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.graphics import *
 import matplotlib.pyplot as plt
 import seaborn as sns
 import datetime
@@ -137,6 +138,8 @@ class LoginScreen(GridLayout):
         self.add_widget(back)
     
     def callback(self, instance):
+        email_data = self.email.text
+        Password_data = 
         print('\n\nLogin as : '+ self.email.text +'\nPassword : '+ self.password.text)
         app.screenManager.current = "AfterLogin"
 
