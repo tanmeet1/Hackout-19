@@ -80,7 +80,7 @@ class Update_info(BoxLayout):
     
     def Submit_Callback(self, instance):
         print("Submit Clicked")
-        UserID_Data = str(self.userID.text)
+        UserID_Data = int(self.userID.text)
         UserName_Data = str(self.userName.text)
         Height_data = str(self.hight.text)
         Weight_data = str(self.weight.text)
@@ -88,7 +88,10 @@ class Update_info(BoxLayout):
         time_data = str(datetime.datetime.now())
         fields=[UserID_Data,UserName_Data,time_data,Height_data,Weight_data,Allergy_data]
 
-        data = pd.read_csv("res/Singledata User Info.csv",names =['UID','Name','Time','Height','Weight','Allergy'])
+        data = pd.read_csv("res/Singledata User Info.csv")
+        
+        #print(data.index)
+        #print(data["UID"])
         data.set_index("UID",inplace=True)
         if UserID_Data in data.index:
             data.loc[UserID_Data]["Name"] = UserName_Data
