@@ -278,8 +278,8 @@ class VisualMenu(BoxLayout):
 
     def showSteps(self,instance):
         userID = self.userID.text
-        app.stepsScreen.setUID(userID)
-        app.screenManager.current = ""
+        app.stepsVisualPage.setUID(userID)
+        app.screenManager.current = "StepsVisual"
 
     def showSleep(self,instance):
         userID = self.userID.text
@@ -297,35 +297,45 @@ class VisualMenu(BoxLayout):
         app.screenManager.current = ""
 
 
-class Stepsdata_viz(BoxLayout):
+class StepsVisual(BoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
-        DataFrame = pd.read_csv('res/Multidata User Info1.csv',error_bad_lines=False,encoding="latin1",names=["UID","Name","TimeStamp","Steps","Sleep","HR"])
-        userid = 2
-        sleep_data = DataFrame[DataFrame.UID == userid]
-        x_axis = sleep_data.TimeStamp.values
-        y_axis = sleep_data.Steps.values
+        self.orientation = 'vertical'
+        self.add_widget(Label(text="Steps Data"))
+
+    def setUID(self,UID):
+        data = pd.read_csv('res/Multidata User Info1.csv')
+        
+        sleep_data = data[data.UID==int(UID)]
+        #print(sleep_data)
+
+        x_axis = sleep_data.TimeStamp
+        y_axis = sleep_data.Steps
+
+        #print(x_axis)
+        #print(y_axis)
+
+        #plt.figure(sigsize=(10,10))
         ax = sns.lineplot(x_axis,y_axis)
-        ax.get_figure().savefig("step_data.png")
-        image = AsyncImage(source="res/step_data.png", allow_stretch=True)
-        self.add_widget(image)
-        back_button = Button(text="Back",on_press=self.Back_callBack)
+        #ax.set_xticklables(rotation=90)
+        plt.xticks(rotation=90)
+        ax.get_figure().savefig("res/step_data.png")
+        
+        self.image = AsyncImage(source="res/step_data.png", allow_stretch=True)
+        self.add_widget(self.image)
+        
+        self.back_button = Button(text="Back",on_press=self.Back_callBack,size_hint=(0.25,0.25))
+        self.add_widget(self.back_button)
 
     def Back_callBack(self,instance):
-        app.screenManager.current = ""
+        self.remove_widget(self.image)
+        self.remove_widget(self.back_button)
+        app.screenManager.current = "VisualMenu"
         
-        
-        
-
 
 class HealthCare(App):
     def build(self):
         self.screenManager = ScreenManager()
-
-        # self.stepGraph = Stepsdata_viz()
-        # stepscreen = Screen(name="Index")
-        # stepscreen.add_widget(self.stepGraph)
-        # self.screenManager.add_widget(stepscreen)
 
         self.indexPage = index_main()
         indexScreen = Screen(name="Index")
@@ -366,6 +376,12 @@ class HealthCare(App):
         VisualMenuScreen = Screen(name="VisualMenu")
         VisualMenuScreen.add_widget(self.VisualMenuPage)
         self.screenManager.add_widget(VisualMenuScreen)
+
+        self.stepsVisualPage = StepsVisual()
+        stepScreen = Screen(name="StepsVisual")
+        stepScreen.add_widget(self.stepsVisualPage)
+        self.screenManager.add_widget(stepScreen)
+
 
         return self.screenManager
 
