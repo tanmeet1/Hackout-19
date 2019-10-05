@@ -10,7 +10,8 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from kivy.uix.screenmanager import ScreenManager, Screen
-global pid
+
+
 class index_main(BoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
@@ -66,7 +67,8 @@ class LoginScreen(GridLayout):
     
     def callback(self, instance):
         print('\n\nLogin as : '+ self.email.text +'\nPassword : '+ self.password.text)
-        app.screenManager.current = "DataScreen"
+        app.screenManager.current = "AfterLogin"
+
     def retback(self,instance):
         app.screenManager.current = "Index"
 
@@ -102,13 +104,14 @@ class SignUp(GridLayout):
     def retback(self,instance):
         app.screenManager.current = "Index"
 
+
 class GetData(BoxLayout):
+
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
-        article_read = pd.read_csv("res/Singledata User Info.csv", delimiter = ',', names =['uid','name','time','height','weight','allergy'])
-        pid = 9999
+        self.article_read = pd.read_csv("res/Singledata User Info.csv",names =['UID','Name','Time','Height','Weight','Allergy'])
         self.add_widget(Label(text="Patient Data"))
-        
+        self.orientation = 'vertical'
         # Grid1 = GridLayout(cols = 2)
         # Grid1.add_widget(Label(text = "Enter the Patient ID : "))
         # Grid1.uid = TextInput(multiline = False)
@@ -118,41 +121,51 @@ class GetData(BoxLayout):
         
         #self.submit = Button(text="Submit",on_press=self.submit_pid)
         #self.add_widget(self.submit)
-        
-        self.add_widget(Label(text=str(article_read[article_read.uid[article_read.uid == self.pid]])))
-        self.add_widget(Label(text=str(article_read[article_read.name[article_read.uid == self.pid]])))
-        self.add_widget(Label(text=str(article_read[article_read.time[article_read.uid == self.pid]])))
-        self.add_widget(Label(text=str(article_read[article_read.height[article_read.uid == self.pid]])))
-        self.add_widget(Label(text=str(article_read[article_read.weight[article_read.uid == self.pid]])))
-        self.add_widget(Label(text=str(article_read[article_read.allergy[article_read.uid == self.pid]])))
+        #self.add_widget(Label(text=str(article_read.UID[article_read.UID == self.__class__.pid])))
+        # self.add_widget(Label(text=str(article_read[article_read.name[article_read.uid == self.__class__.pid]])))
+        # self.add_widget(Label(text=str(article_read[article_read.time[article_read.uid == self.__class__.pid]])))
+        # self.add_widget(Label(text=str(article_read[article_read.height[article_read.uid == self.__class__.pid]])))
+        # self.add_widget(Label(text=str(article_read[article_read.weight[article_read.uid == self.__class__.pid]])))
+        # self.add_widget(Label(text=str(article_read[article_read.allergy[article_read.uid == self.__class__.pid]])))
 
     # def submit_pid(self,instance):
     #     self.Grid1.pid = self.Grid1.uid.text
     def update_info(self,pid):
-        self.pid=pid
-        
+        print(self.article_read.head())
+        self.add_widget(Label(text=str(self.article_read.UID[self.article_read.UID == pid])))
+        self.add_widget(Label(text=str(self.article_read.Name[self.article_read.UID == pid])))
+        self.add_widget(Label(text=str(self.article_read.Time[self.article_read.UID == pid])))
+        self.add_widget(Label(text=str(self.article_read.Height[self.article_read.UID == pid])))
+        self.add_widget(Label(text=str(self.article_read.Weight[self.article_read.UID == pid])))
+        self.add_widget(Label(text=str(self.article_read.Allergy[self.article_read.UID == pid])))
+        #print(self.__class__.pid)
+
+
 class ScanUID(BoxLayout):
+    
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.orientation = 'vertical'
-        Grid1 = GridLayout(cols = 2)
-        Grid1.add_widget(Label(text = "Enter the Patient ID : "))
-        Grid1.uid = TextInput(multiline = False)
-        Grid1.add_widget(Grid1.uid)
+        self.Grid1 = GridLayout(cols = 2)
+        self.Grid1.add_widget(Label(text = "Enter the Patient ID : "))
+        self.userID = TextInput(multiline = False)
+        self.Grid1.add_widget(self.userID)
 
-        self.add_widget(Grid1) 
+        self.add_widget(self.Grid1) 
         
         self.submit = Button(text="Submit",on_press=self.submit_pid)
         self.add_widget(self.submit)
     
     def submit_pid(self,instance):
-        pid = self.Grid1.uid.text
-        app.GetData.update_info(pid)
-        app.screenManager.current = "GetUID"
+        pid = self.userID.text
+        print(pid)
+        app.dataPage.update_info(pid)
+        app.screenManager.current = "GetData"
+
 
 class AfterLogin(BoxLayout):
     def __init__(self,**kwargs):
-
+        super().__init__(**kwargs)
         view = Button(text="View Patient Data")
         view.bind(on_press=self.getuid)
         self.add_widget(view)
@@ -163,7 +176,8 @@ class AfterLogin(BoxLayout):
 
     def getuid(self,instance):
         app.screenManager.current = "GetUID"
-    #def adduid(self,instance):
+    def adduid(self,instance):
+        pass
 
 class HealthCare(App):
     def build(self):
@@ -185,19 +199,19 @@ class HealthCare(App):
         self.screenManager.add_widget(signUpScreen)
 
         self.dataPage = GetData()
-        dataScreen = Screen (name = "DataScreen")
+        dataScreen = Screen (name = "GetData")
         dataScreen.add_widget(self.dataPage)
         self.screenManager.add_widget(dataScreen)
 
-        self.afterLogin = AfterLogin()
-        afterLogin  = Screen (name = "ViewAdd")
-        afterLogin.add_widget(self.afterLogin)
-        self.screenManager.add_widget(afterLogin)
+        self.afterLoginPage = AfterLogin()
+        afterLoginScreen  = Screen (name = "AfterLogin")
+        afterLoginScreen.add_widget(self.afterLoginPage)
+        self.screenManager.add_widget(afterLoginScreen)
 
-        self.getUID = ScanUID()
-        getUID  = Screen (name = "GetUID")
-        getUID.add_widget(self.getUID)
-        self.screenManager.add_widget(getUID)
+        self.getUIDPage = ScanUID()
+        getUIDScreen  = Screen (name = "GetUID")
+        getUIDScreen.add_widget(self.getUIDPage)
+        self.screenManager.add_widget(getUIDScreen)
 
         return self.screenManager
 
