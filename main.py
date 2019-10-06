@@ -653,10 +653,10 @@ class AddPre(BoxLayout):
 
     def Submit_Callback(self,instance):
         field = [int(self.userID.text),self.userName.text,datetime.datetime.now(),self.pres.text]
-        # with open("res/Pres.csv",'a') as dataN:
-        #         writer = csv.writer(dataN)
-        #         writer.writerow(field)
-        #     dataN.close()
+        with open("res/Pres.csv",'a') as dataN:
+            writer = csv.writer(dataN)
+            writer.writerow(field)
+        dataN.close()
 
     def Back_Callback(self, instance):
         print("Back Clicked")
