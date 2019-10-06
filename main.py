@@ -389,6 +389,10 @@ class AfterLogin(BoxLayout):
         self.add_widget(visual)
         # self.add_widget(box2)
 
+        addPres = Button(text="Add Prescription")
+        addPres.bind(on_press=self.AddPres)
+        self.add_widget(addPres)
+
         back =  Button(text="Logout")
         back.bind(on_press=self.Back_call)
         self.add_widget(back)
@@ -401,6 +405,8 @@ class AfterLogin(BoxLayout):
         app.screenManager.current = "VisualMenu"
     def Back_call(self,instance):
         app.screenManager.current = "Index"
+    def AddPres(self,instance):
+        app.screenManager.current = "AddPre"
 
 class VisualMenu(BoxLayout):
     def __init__(self,**kwargs):
@@ -600,25 +606,23 @@ class PPVisual(BoxLayout):
         self.add_widget(Label(text="Past Prescription Data",size_hint=(0.25,0.25),pos_hint={'top ':1,'center_x':0.5}))
 
     def setUID(self,UID):
-        data = pd.read_csv('res/Multidata User Info1.csv')
-        
-        # sleep_data = data[data.UID==int(UID)]
+        data = pd.read_csv('res/Pres.csv')
+        data = data[data.UID==int(UID)]
 
-        # x_axis = sleep_data.TimeStamp
-        # y_axis = sleep_data.Sleep
-
-        # ax = sns.lineplot(x_axis,y_axis)
-        # plt.xticks(rotation=90)
-        # ax.get_figure().savefig("res/pp_data.png")
+        count = 5
+        self.Grid = GridLayout(cols=1)
+        for (Time,Pres) in zip(data["Timestamp"],data["Prescription"]):
+            if count>0:
+                self.Grid.add_widget(Label(text=str(Time)+": "+str(Pres)))
+                count = count -1
         
-        # self.image = AsyncImage(source="res/pp_data.png", allow_stretch=True)
-        # self.add_widget(self.image)
-        
+        self.add_widget(self.Grid)
         self.back_button = Button(text="Back",on_press=self.Back_callBack,size_hint=(0.25,0.25),pos_hint={'top ':1,'center_x':0.5})
         self.add_widget(self.back_button)
 
     def Back_callBack(self,instance):
         self.remove_widget(self.back_button)
+        self.remove_widget(self.Grid)
         app.screenManager.current = "VisualMenu"
 
 
@@ -657,6 +661,7 @@ class AddPre(BoxLayout):
             writer = csv.writer(dataN)
             writer.writerow(field)
         dataN.close()
+        app.screenManager.current = "AfterLogin"
 
     def Back_Callback(self, instance):
         print("Back Clicked")
