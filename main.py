@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import datetime
 import csv
-#import navbar
+from kivy.uix.popup import Popup
 
 
 def nav():
@@ -195,8 +195,40 @@ class LoginScreen(BoxLayout):
         self.add_widget(self.box3)
     
     def callback(self, instance):
-        print('\n\nLogin as : '+ self.email.text +'\nPassword : '+ self.password.text)
-        app.screenManager.current = "AfterLogin"
+        Login_Email = self.email.text
+        Login_Password = self.password.text
+
+        data = pd.read_csv("res/Login_signup.csv")
+        
+        print(data["email"],"[\'"+str(Login_Email)+"\']")
+        print(data["password"],"["+str(Login_Password)+"]" )
+        print(Login_Email,Login_Password)
+        
+        print(data["email"])
+        temp = data.set_index("email")
+        print(temp)
+        if Login_Email in temp.index :
+
+            if Login_Password == temp.loc[Login_Email]["password"] :
+                print("Sucess")
+                app.screenManager.current = "AfterLogin"
+            else:
+                print("one")
+                layout = GridLayout(cols = 1, padding = 10) 
+                closeButton = Button(text = "Close the pop-up") 
+                layout.add_widget(closeButton)         
+                popup = Popup(title ='login credentials are Wrong....', content = layout,size_hint=(None, None),size=(420, 120))   
+                popup.open()     
+                closeButton.bind(on_press = popup.dismiss)
+        else:
+            print("two")
+            layout = GridLayout(cols = 1, padding = 10) 
+            closeButton = Button(text = "Close the pop-up") 
+            layout.add_widget(closeButton)         
+            popup = Popup(title ='login credentials are Wrong....', content = layout,size_hint=(None, None),size=(420, 120))   
+            popup.open()     
+            closeButton.bind(on_press = popup.dismiss)    
+
 
     def retback(self,instance):
         app.screenManager.current = "Index"
@@ -292,7 +324,6 @@ class ScanUID(BoxLayout):
         self.box1.add_widget(self.submit)
 
         self.add_widget(self.box1)
-    
     def submit_pid(self,instance):
         pid = self.userID.text
         print(pid)
@@ -480,7 +511,6 @@ class HeartRateVisual(BoxLayout):
         self.remove_widget(self.image)
         self.remove_widget(self.back_button)
         app.screenManager.current = "VisualMenu"
-
 
 class PPVisual(BoxLayout):
     def __init__(self,**kwargs):
