@@ -303,19 +303,19 @@ class GetData(BoxLayout):
         self.orientation = 'vertical'
         #self.add_widget(navbar().nav())
         self.add_widget(nav())
-        self.add_widget(Label(text="Patient Data"))
+        self.add_widget(Label(text="[size=24][color=ff0000]Patient Data[/color][/size]",markup=True))
 
     def update_info(self,pid):
         #print(self.article_read.UID)
         #print(self.article_read.UID == int(pid))
         self.article_read = pd.read_csv("res/Singledata User Info.csv")
         comp = self.article_read.UID == int(pid)
-        self.add_widget(Label(text="UID: "+ str(self.article_read.UID[comp].values)))
-        self.add_widget(Label(text="Name: "+str(self.article_read.Name[comp].values)))
-        self.add_widget(Label(text="Time: "+str(self.article_read.TimeStamp[comp].values)))
-        self.add_widget(Label(text="Height: "+str(self.article_read.Height[comp].values)))
-        self.add_widget(Label(text="Weight: "+str(self.article_read.Weight[comp].values)))
-        self.add_widget(Label(text="Allergy: "+str(self.article_read.Allergy[comp].values)))
+        self.add_widget(Label(text="[color=0000ff]UID:      [/color]"+ str(self.article_read.UID[comp].values),markup=True))
+        self.add_widget(Label(text="[color=0000ff]Name:      [/color]"+str(self.article_read.Name[comp].values),markup=True))
+        self.add_widget(Label(text="[color=0000ff]Time:      [/color]"+str(self.article_read.TimeStamp[comp].values),markup=True))
+        self.add_widget(Label(text="[color=0000ff]Height:      [/color]"+str(self.article_read.Height[comp].values),markup=True))
+        self.add_widget(Label(text="[color=0000ff]Weight:      [/color]"+str(self.article_read.Weight[comp].values),markup=True))
+        self.add_widget(Label(text="[color=0000ff]Allergy:      [/color]"+str(self.article_read.Allergy[comp].values),markup=True))
         #print(self.__class__.pid)
 
         back = Button(text='Back')
