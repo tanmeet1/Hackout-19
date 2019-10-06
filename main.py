@@ -15,11 +15,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import datetime
 import csv
-#import navbar
 
 
 def nav():
-    Grid1 = GridLayout(cols = 5,size_hint=(1.,0.07))
+    Grid1 = GridLayout(cols = 5,size_hint=(1.,0.07),row_default_height=35,spacing = 0,row_force_default=True)
         
     index_page = Button(text="Index Main",size_hint=(.5,.5),size=(10,10),on_press=ra)
     login_page = Button(text="Login",size_hint=(.5,.5),size=(10,10),on_press=rb)
@@ -55,28 +54,31 @@ class index_main(BoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.orientation = 'vertical'
-
         self.add_widget(nav())
 
-        Box1=BoxLayout(orientation= 'vertical', spacing = 20)
+        Box1=BoxLayout(orientation= 'vertical',padding=[10,-125,10,35])
         Box1.add_widget(Label(text="HealthCare (For Doctors)",font_size='30sp'))
+
+        Box2=BoxLayout(padding=[50,-175,50,35])
         carousel = Carousel(direction='right')
 
         for i in range(1, 5):
             src = "res/%s.jpg" % str(i)
-            image = AsyncImage(source=src, allow_stretch=True)
+            image = AsyncImage(source=src, allow_stretch=False)
             carousel.add_widget(image)
         carousel.loop = True
         Clock.schedule_interval(carousel.load_next,2)
-        Box1.add_widget(carousel)
+        Box2.add_widget(carousel)
 
-        Grid2 = GridLayout(cols = 2,size_hint=(1.0,0.3),pos_hint={'center x' : 0.7},pos=(10,10))
+        Grid2 = GridLayout(cols = 2,size_hint=(1.0,0.1),padding=[50,-20,50,20],spacing=20,row_default_height=30,row_force_default=True)
         Login = Button(text='Login', on_press=self.Login_Callback)
         Signup = Button(text='SignUp', on_press=self.Signup_Callback)
         Grid2.add_widget(Login)
         Grid2.add_widget(Signup)
-        Box1.add_widget(Grid2)
+        
         self.add_widget(Box1)
+        self.add_widget(Box2)
+        self.add_widget(Grid2)
 
     def Login_Callback(self, instance):
         print("Login Clicked")
@@ -164,22 +166,22 @@ class LoginScreen(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.spacing = 150
+        self.spacing = 130
         self.orientation='vertical'
         #self.add_widget(navbar().nav())
         #self.add_widget(nav())
 
-        self.box1 = BoxLayout(spacing = 30, pos_hint={'top ':1}, size_hint=(1,0.15),padding=[0,20,0,0])
+        self.box1 = BoxLayout(spacing = 30, pos_hint={'top ':1}, size_hint=(1,0.10),padding=[0,50,0,20])
         self.box1.add_widget(Label(text='Email id: '))
         self.email = TextInput(multiline=False)
         self.box1.add_widget(self.email)
 
-        self.box2 = BoxLayout(spacing = 30, pos_hint={'center_y':1}, size_hint=(1,0.15),padding=[0,0,0,20])
+        self.box2 = BoxLayout(spacing = 30, pos_hint={'center_y':1}, size_hint=(1,0.10),padding=[0,50,0,20])
         self.box2.add_widget(Label(text='Password: '))
         self.password = TextInput(password=True, multiline=False)
         self.box2.add_widget(self.password)
 
-        self.box3 = BoxLayout(spacing = 30, pos_hint={'center_x':0.5,'center_y':1.25}, size_hint=(1.0,0.20),padding=[0,0,0,80])
+        self.box3 = BoxLayout(spacing = 30, pos_hint={'center_x':0.5,'center_y':1.25}, size_hint=(1.0,0.068),padding=[20,0,20,35])
         self.login = Button(text='Login')
         self.login.bind(on_press=self.callback)
         self.box3.add_widget(self.login)
@@ -195,15 +197,31 @@ class LoginScreen(BoxLayout):
     def callback(self, instance):
         Login_Email = self.email.text
         Login_Password = self.password.text
+
         data = pd.read_csv("res/Login_signup.csv")
-        print(data.iloc[:,0].values,"[\'"+str(Login_Email)+"\']")
-        print(data.iloc[:,1].values,"["+str(Login_Password)+"]" )
+        
+        print(data["email"],"[\'"+str(Login_Email)+"\']")
+        print(data["password"],"["+str(Login_Password)+"]" )
         print(Login_Email,Login_Password)
-        if str(Login_Email) in data.iloc[:,0].values :
-            if str(Login_Password) in data.iloc[:,1].values:
+        
+        print(data["email"])
+        temp = data.set_index("email")
+        print(temp)
+        if Login_Email in temp.index :
+
+            if Login_Password == temp.loc[Login_Email]["password"] :
                 print("Sucess")
                 app.screenManager.current = "AfterLogin"
+            else:
+                print("one")
+                layout = GridLayout(cols = 1, padding = 10) 
+                closeButton = Button(text = "Close the pop-up") 
+                layout.add_widget(closeButton)         
+                popup = Popup(title ='login credentials are Wrong....', content = layout,size_hint=(None, None),size=(420, 120))   
+                popup.open()     
+                closeButton.bind(on_press = popup.dismiss)
         else:
+            print("two")
             layout = GridLayout(cols = 1, padding = 10) 
             closeButton = Button(text = "Close the pop-up") 
             layout.add_widget(closeButton)         
@@ -217,26 +235,34 @@ class LoginScreen(BoxLayout):
 
     
 
-class SignUp(GridLayout):
+class SignUp(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.cols = 2
-        
-        self.add_widget(Label(text="Email Id:"))
+        self.spacing = 130
+        self.orientation = 'vertical'
+
+        self.box1 = BoxLayout(spacing = 30, pos_hint={'top ':1}, size_hint=(1,0.10),padding=[0,50,0,20])
+        self.box1.add_widget(Label(text="Email Id:"))
         self.email = TextInput(multiline=False)
-        self.add_widget(self.email)
+        self.box1.add_widget(self.email)
 
-        self.add_widget(Label(text="Password:"))
+        self.box2 = BoxLayout(spacing = 30, pos_hint={'center_y':1}, size_hint=(1,0.10),padding=[0,50,0,20])
+        self.box2.add_widget(Label(text="Password:"))
         self.password = TextInput(password=True,multiline=False)
-        self.add_widget(self.password)
+        self.box2.add_widget(self.password)
 
+        self.box3 = BoxLayout(spacing = 30, pos_hint={'center_x':0.5,'center_y':1.25}, size_hint=(1.0,0.068),padding=[20,0,20,35])
         self.signUp = Button(text="Sign Up")
         self.signUp.bind(on_press=self.signUpButton)
-        self.add_widget(self.signUp)
+        self.box3.add_widget(self.signUp)
 
-        back = Button(text='Return to Main Menu')
-        back.bind(on_press=self.retback)
-        self.add_widget(back)
+        self.back = Button(text='Return to Main Menu')
+        self.back.bind(on_press=self.retback)
+        self.box3.add_widget(self.back)
+
+        self.add_widget(self.box1)
+        self.add_widget(self.box2)
+        self.add_widget(self.box3)
 
     def signUpButton(self,instance):
         email = self.email.text
@@ -252,8 +278,10 @@ class SignUp(GridLayout):
             popup.open()     
             closeButton.bind(on_press = popup.dismiss)
         else:
-            data = data.append([str(email),str(password)])
-            data.to_csv("res/Login_signup.csv",index=False)
+            with open("res/Login_signup.csv",'a') as dataN:
+                writer = csv.writer(dataN)
+                writer.writerow([str(email),str(password)])
+            dataN.close()
             layout = GridLayout(cols = 1, padding = 10) 
             closeButton = Button(text = "Close the pop-up") 
             layout.add_widget(closeButton)         
@@ -305,16 +333,20 @@ class ScanUID(BoxLayout):
         #self.add_widget(navbar().nav())
         self.add_widget(nav())
 
-        self.Grid1 = GridLayout(cols = 2)
+        self.Grid1 = GridLayout(cols = 2,size_hint=(1,0.22),padding=[0,50,0,0])
         self.Grid1.add_widget(Label(text = "Enter the Patient ID : "))
         self.userID = TextInput(multiline = False)
+        
         self.Grid1.add_widget(self.userID)
-
         self.add_widget(self.Grid1) 
+
+        self.box1 = BoxLayout(spacing=30,padding=[50,380,50,35])
         
         self.submit = Button(text="Submit",on_press=self.submit_pid)
-        self.add_widget(self.submit)
-    
+        self.box1.add_widget(self.submit)
+
+        self.add_widget(self.box1)
+
     def submit_pid(self,instance):
         pid = self.userID.text
         print(pid)
@@ -325,20 +357,23 @@ class AfterLogin(BoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.orientation = 'vertical'
+        self.spacing=450
         #self.add_widget(navbar().nav())
         self.add_widget(nav())
+        box2 = BoxLayout(spacing = 20,size_hint=(1,0.09), padding=[20,0,20,35])
 
         view = Button(text="View Patient Data")
         view.bind(on_press=self.getuid)
-        self.add_widget(view)
+        box2.add_widget(view)
 
         add = Button(text="Add New Patient")
         add.bind(on_press=self.adduid)
-        self.add_widget(add)
+        box2.add_widget(add)
 
         visual = Button(text="Visualize Patient Data")
         visual.bind(on_press=self.showVisual)
-        self.add_widget(visual)
+        box2.add_widget(visual)
+        self.add_widget(box2)
 
     def getuid(self,instance):
         app.screenManager.current = "GetUID"
@@ -353,8 +388,15 @@ class VisualMenu(BoxLayout):
         super().__init__(**kwargs)
         self.orientation = 'vertical'
 
-        self.userID = TextInput(text="Add UserID here",multiline=False)
-        self.add_widget(self.userID)
+        self.box1 = BoxLayout()
+
+        self.lb = Label(text="Enter User ID here : ")
+        self.box1.add_widget(self.lb)
+
+        self.userID = TextInput(multiline=False)
+        self.box1.add_widget(self.userID)
+        
+        self.add_widget(self.box1)
 
         self.steps = Button(text="Steps")
         self.steps.bind(on_press=self.showSteps)
