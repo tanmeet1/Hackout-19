@@ -99,27 +99,27 @@ class Update_info(BoxLayout):
         self.add_widget(nav())      
         
         Box1=BoxLayout(orientation= 'vertical', spacing = 20)
-        Box1.add_widget(Label(text="Update Info"))
+        Box1.add_widget(Label(text="Update Info",font_size='30sp'))
         grid = GridLayout(cols = 2)
 
-        grid.add_widget(Label(text="User ID :",color=(1,0,0,1)))
+        grid.add_widget(Label(text="User ID :"))
         self.userID = TextInput(multiline=False)
         grid.add_widget(self.userID)
-        grid.add_widget(Label(text="User Name :",color=(1,0,0,1)))
+        grid.add_widget(Label(text="User Name :"))
         self.userName = TextInput(multiline=False)
         grid.add_widget(self.userName)
-        grid.add_widget(Label(text="Height :",color=(1,0,0,1)))
+        grid.add_widget(Label(text="Height :"))
         self.hight = TextInput(multiline=False)
         grid.add_widget(self.hight)
-        grid.add_widget(Label(text="Weight :",color=(1,0,0,1)))
+        grid.add_widget(Label(text="Weight :"))
         self.weight = TextInput(multiline=False)
         grid.add_widget(self.weight)
-        grid.add_widget(Label(text="Allergy :",color=(1,0,0,1)))
+        grid.add_widget(Label(text="Allergy :"))
         self.allergy = TextInput(multiline=False)
         grid.add_widget(self.allergy)
         
-        self.Submit =  Button(text='Submit', on_press=self.Submit_Callback,color=(0,1,0,1))
-        Back =  Button(text='Back', on_press=self.Back_Callback,color=(0,1,0,1))
+        self.Submit =  Button(text='Submit', on_press=self.Submit_Callback)
+        Back =  Button(text='Back', on_press=self.Back_Callback)
         grid.add_widget(self.Submit)
         grid.add_widget(Back)
 
@@ -345,35 +345,53 @@ class ScanUID(BoxLayout):
         self.submit = Button(text="Submit",on_press=self.submit_pid)
         self.box1.add_widget(self.submit)
 
+        self.submit = Button(text="Back",on_press=self.Back_call)
+        self.box1.add_widget(self.submit)
+
         self.add_widget(self.box1)
 
     def submit_pid(self,instance):
         pid = self.userID.text
-        print(pid)
-        app.dataPage.update_info(pid)
-        app.screenManager.current = "GetData"
+        if pid:
+            app.dataPage.update_info(pid)
+            app.screenManager.current = "GetData"
+        else:
+            layout = GridLayout(cols = 1, padding = 10) 
+            closeButton = Button(text = "Close the pop-up") 
+            layout.add_widget(closeButton)         
+            popup = Popup(title ='Enter USER ID', content = layout,size_hint=(None, None),size=(420, 120))   
+            popup.open()     
+            closeButton.bind(on_press = popup.dismiss)
+    
+    def Back_call(self,instance):
+        app.screenManager.current = "AfterLogin"
+
 
 class AfterLogin(BoxLayout):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
         self.orientation = 'vertical'
-        self.spacing=450
+        self.spacing=40
         #self.add_widget(navbar().nav())
         self.add_widget(nav())
-        box2 = BoxLayout(spacing = 20,size_hint=(1,0.09), padding=[20,0,20,35])
+        #box2 = BoxLayout(spacing = 20,size_hint=(1,0.09), padding=[20,0,20,35])
 
         view = Button(text="View Patient Data")
         view.bind(on_press=self.getuid)
-        box2.add_widget(view)
+        self.add_widget(view)
 
         add = Button(text="Add New Patient")
         add.bind(on_press=self.adduid)
-        box2.add_widget(add)
+        self.add_widget(add)
 
         visual = Button(text="Visualize Patient Data")
         visual.bind(on_press=self.showVisual)
-        box2.add_widget(visual)
-        self.add_widget(box2)
+        self.add_widget(visual)
+        # self.add_widget(box2)
+
+        back =  Button(text="Logout")
+        back.bind(on_press=self.Back_call)
+        self.add_widget(back)
 
     def getuid(self,instance):
         app.screenManager.current = "GetUID"
@@ -381,7 +399,8 @@ class AfterLogin(BoxLayout):
         app.screenManager.current = "UpdateInfo"
     def showVisual(self,instance):
         app.screenManager.current = "VisualMenu"
-
+    def Back_call(self,instance):
+        app.screenManager.current = "Index"
 
 class VisualMenu(BoxLayout):
     def __init__(self,**kwargs):
@@ -414,26 +433,64 @@ class VisualMenu(BoxLayout):
         self.pp.bind(on_press=self.showPP)
         self.add_widget(self.pp)
 
+        self.Back = Button(text="Back")
+        self.Back.bind(on_press=self.BackPage)
+        self.add_widget(self.Back)
 
     def showSteps(self,instance):
         userID = self.userID.text
-        app.stepsVisualPage.setUID(userID)
-        app.screenManager.current = "StepsVisual"
+        if userID: 
+            app.stepsVisualPage.setUID(userID)
+            app.screenManager.current = "StepsVisual"
+        else :
+            layout = GridLayout(cols = 1, padding = 10) 
+            closeButton = Button(text = "Close the pop-up") 
+            layout.add_widget(closeButton)         
+            popup = Popup(title ='Enter USER ID', content = layout,size_hint=(None, None),size=(420, 120))   
+            popup.open()     
+            closeButton.bind(on_press = popup.dismiss)
 
     def showSleep(self,instance):
         userID = self.userID.text
-        app.sleepVisualPage.setUID(userID)
-        app.screenManager.current = "SleepVisual"
+        if userID:
+            app.sleepVisualPage.setUID(userID)
+            app.screenManager.current = "SleepVisual"
+        else :
+            layout = GridLayout(cols = 1, padding = 10) 
+            closeButton = Button(text = "Close the pop-up") 
+            layout.add_widget(closeButton)         
+            popup = Popup(title ='Enter USER ID', content = layout,size_hint=(None, None),size=(420, 120))   
+            popup.open()     
+            closeButton.bind(on_press = popup.dismiss)
 
     def showHeartRate(self,instance):
         userID = self.userID.text
-        app.heartRateVisualPage.setUID(userID)
-        app.screenManager.current = "HeartRateVisual"
+        if userID:
+            app.heartRateVisualPage.setUID(userID)
+            app.screenManager.current = "HeartRateVisual"
+        else :
+            layout = GridLayout(cols = 1, padding = 10) 
+            closeButton = Button(text = "Close the pop-up") 
+            layout.add_widget(closeButton)         
+            popup = Popup(title ='Enter USER ID', content = layout,size_hint=(None, None),size=(420, 120))   
+            popup.open()     
+            closeButton.bind(on_press = popup.dismiss)
 
     def showPP(self,instance):
         userID = self.userID.text
-        app.PPVisualPage.setUID(userID)
-        app.screenManager.current = "PPVisual"
+        if userID:
+            app.ppVisualPage.setUID(userID)
+            app.screenManager.current = "PPVisual"
+        else :
+            layout = GridLayout(cols = 1, padding = 10) 
+            closeButton = Button(text = "Close the pop-up") 
+            layout.add_widget(closeButton)         
+            popup = Popup(title ='Enter USER ID', content = layout,size_hint=(None, None),size=(420, 120))   
+            popup.open()     
+            closeButton.bind(on_press = popup.dismiss)
+    
+    def BackPage(self,instance):
+        app.screenManager.current = "AfterLogin"
 
 
 class StepsVisual(BoxLayout):
@@ -561,7 +618,6 @@ class PPVisual(BoxLayout):
         self.add_widget(self.back_button)
 
     def Back_callBack(self,instance):
-        self.remove_widget(self.image)
         self.remove_widget(self.back_button)
         app.screenManager.current = "VisualMenu"
 
