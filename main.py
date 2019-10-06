@@ -542,6 +542,46 @@ class PPVisual(BoxLayout):
         app.screenManager.current = "VisualMenu"
 
 
+class AddPre(BoxLayout):
+    def __init__(self,**kwargs):
+        super().__init__(**kwargs)
+        self.orientation='vertical'
+          
+        self.add_widget(nav())      
+        
+        Box1=BoxLayout(orientation= 'vertical', spacing = 20)
+        Box1.add_widget(Label(text="Add Prescription"))
+        grid = GridLayout(cols = 2)
+
+        grid.add_widget(Label(text="User ID :",color=(1,0,0,1)))
+        self.userID = TextInput(multiline=False)
+        grid.add_widget(self.userID)
+        grid.add_widget(Label(text="User Name :",color=(1,0,0,1)))
+        self.userName = TextInput(multiline=False)
+        grid.add_widget(self.userName)
+        grid.add_widget(Label(text="Prescription :",color=(1,0,0,1)))
+        self.pres = TextInput(multiline=False)
+        grid.add_widget(self.pres)
+        
+        self.Submit =  Button(text='Submit', on_press=self.Submit_Callback,color=(0,1,0,1))
+        Back =  Button(text='Back', on_press=self.Back_Callback,color=(0,1,0,1))
+        grid.add_widget(self.Submit)
+        grid.add_widget(Back)
+
+        Box1.add_widget(grid)
+        self.add_widget(Box1)
+
+    def Submit_Callback(self,instance):
+        field = [int(self.userID.text),self.userName.text,datetime.datetime.now(),self.pres.text]
+        # with open("res/Pres.csv",'a') as dataN:
+        #         writer = csv.writer(dataN)
+        #         writer.writerow(field)
+        #     dataN.close()
+
+    def Back_Callback(self, instance):
+        print("Back Clicked")
+        app.screenManager.current = "AfterLogin"
+
 
 class HealthCare(App):
     def build(self):
